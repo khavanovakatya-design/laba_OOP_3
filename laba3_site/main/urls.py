@@ -13,7 +13,7 @@ urlpatterns = [
     path('contact', views.contact),
     path('faq', views.faq),
     path('login', views.login),
-    path('product', views.product),
+    path('product/<int:product_id>/', views.product, name='product_detail'),
     path('register', views.register),
     path('wishlist', views.wishlist)
 ]

@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Product
 
 def index(request):
     return render(request, 'index.html')
@@ -22,7 +23,8 @@ def checkout(request):
     return render(request, 'checkout.html')
 
 def collection(request):
-    return render(request, 'collection-left-sidebar.html')
+    products = Product.objects.all()
+    return render(request, 'collection-left-sidebar.html', {'products': products})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -33,8 +35,10 @@ def faq(request):
 def login(request):
     return render(request, 'login.html')
 
-def product(request):
-    return render(request, 'product.html')
+def product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    related_products = Product.objects.exclude(id=product.id).order_by('?')[:8]
+    return render(request, 'product.html', {'product': product, 'related_products': related_products})
 
 def register(request):
     return render(request, 'register.html')
