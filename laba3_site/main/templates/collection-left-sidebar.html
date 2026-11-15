@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load static %}
 
 {% block title %}
-Products
+Витрина
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'css/custom-filter.css' %}">
+    
     <div class="collection mt-100">
         <div class="container">
             <div class="row flex-row-reverse">
@@ -13,8 +16,7 @@ Products
                 <div class="col-lg-9 col-md-12 col-12">
                     <div class="filter-sort-wrapper d-flex justify-content-between flex-wrap">
                         <div class="collection-title-wrap d-flex align-items-end">
-                            <h2 class="collection-title heading_24 mb-0">All products</h2>
-                            <p class="collection-counter text_16 mb-0 ms-2">(237 items)</p>
+                            <h2 class="collection-title heading_24 mb-0">{{ total_products }} товаров</h2>
                         </div>
                         <div class="filter-sorting">
                             <div class="collection-sorting position-relative d-none d-lg-block">
@@ -56,7 +58,7 @@ Products
                     </div>
                     <div class="collection-product-container">
                         <div class="row">
-                            {% for product in products %}
+                            {% for product in page_obj %}
                             <div class="col-lg-4 col-md-6 col-6" data-aos="fade-up" data-aos-duration="700">
                                 <div class="product-card">
                                     <div class="product-card-img">
@@ -108,30 +110,54 @@ Products
                     <div class="pagination justify-content-center mt-100">
                         <nav>
                             <ul class="pagination m-0 d-flex align-items-center">
-                                <li class="item disabled">
-                                    <a class="link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-left">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li class="item"><a class="link" href="#">1</a></li>
-                                <li class="item active"><a class="link" href="#">2</a></li>
-                                <li class="item"><a class="link" href="#">3</a></li>
-                                <li class="item"><a class="link" href="#">4</a></li>
-                                <li class="item">
-                                    <a class="link" href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="icon icon-right">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </a>
-                                </li>
+                                
+                                <!-- Кнопка "Назад" -->
+                                {% if page_obj.has_previous %}
+                                    <li class="item">
+                                        <a class="link" href="?page={{ page_obj.previous_page_number }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-left">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="item disabled">
+                                        <a class="link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-left">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <!-- Цифры страниц -->
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="item active"><a class="link" href="#">{{ num }}</a></li>
+                                    {% else %}
+                                        <li class="item"><a class="link" href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <!-- Кнопка "Вперед" -->
+                                {% if page_obj.has_next %}
+                                    <li class="item">
+                                        <a class="link" href="?page={{ page_obj.next_page_number }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-right">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="item disabled">
+                                        <a class="link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-right">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
                             </ul>
                         </nav>
                     </div>
@@ -176,8 +202,56 @@ Products
                         </div>
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                data-bs-toggle="collapse" data-bs-target="#filter-price">
+                                Цена
+                                <span class="faq-heading-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div id="filter-price" class="accordion-collapse collapse show">
+                                
+                                <!-- ПОЛЯ ВВОДА -->
+                                <div class="filter-price d-flex align-items-center justify-content-between mb-3">
+                                    <div class="filter-field">
+                                        <input class="field-input" type="number" id="min-price-input" 
+                                            value="{{ current_min }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+                                    </div>
+                                    <div class="filter-separator px-3">-</div>
+                                    <div class="filter-field">
+                                        <input class="field-input" type="number" id="max-price-input" 
+                                            value="{{ current_max }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+                                    </div>
+                                </div>
+
+                                <!-- ПОЛЗУНОК -->
+                                <div class="price-slider-wrapper position-relative" style="height: 30px; margin-bottom: 20px;">
+                                    <!-- Фоновая линия -->
+                                    <div class="slider-track position-absolute w-100" style="height: 4px; background: #e0e0e0; top: 13px; border-radius: 2px;"></div>
+                                    
+                                    <!-- Активная часть (закрашивается между ползунками) -->
+                                    <div class="slider-range position-absolute" id="slider-range" style="height: 4px; background: #00234D; top: 13px; border-radius: 2px;"></div>
+
+                                    <!-- Ползунок Мин -->
+                                    <input type="range" id="min-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" 
+                                        value="{{ current_min }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
+                                    
+                                    <!-- Ползунок Макс -->
+                                    <input type="range" id="max-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" 
+                                        value="{{ current_max }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
+                                </div>
+
+                                <!-- Кнопка применить (если не хотите, чтобы применялось само при отпускании) -->
+                                <button class="btn btn-primary w-100" id="apply-price-filter" style="background-color: #00234D; color: white; padding: 8px; border-radius: 4px; border: none;">Применить</button>
+                            </div>
+                        </div>
+                        <div class="filter-widget">
+                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                 data-bs-toggle="collapse" data-bs-target="#filter-collection">
-                                Categories
+                                Категория
                                 <span class="faq-heading-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
@@ -192,28 +266,35 @@ Products
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Womens Bag</span>
+                                            <span class="filter-text">Браслет</span>
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Bottles
+                                            Брошь
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Men's Shoe
+                                            Ожерелье
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Toddler Dress
+                                            Колье
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            Кольцо
                                         </label>
                                     </li>
                                 </ul>
@@ -222,7 +303,7 @@ Products
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                 data-bs-toggle="collapse" data-bs-target="#filter-availability">
-                                Availability
+                                Металл
                                 <span class="faq-heading-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
@@ -237,123 +318,42 @@ Products
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">In Stock</span>
+                                            <span class="filter-text">Серебро</span>
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Out of Stock
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-price">
-                                Price
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-price" class="accordion-collapse collapse show">
-                                <div class="filter-price d-flex align-items-center justify-content-between">
-                                    <div class="filter-field">
-                                        <input class="field-input" type="number" placeholder="$0" min="0"
-                                            max="2000.00">
-                                    </div>
-                                    <div class="filter-separator px-3">To</div>
-                                    <div class="filter-field">
-                                        <input class="field-input" type="number" min="0" placeholder="$595.00"
-                                            max="2000.00">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="filter-widget filter-color">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-color">
-                                Colors
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-color" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label blue">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
+                                            Золото
                                         </label>
                                     </li>
                                     <li class="filter-item">
-                                        <label class="filter-label red">
+                                        <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
+                                            Нерж. сталь
                                         </label>
                                     </li>
                                     <li class="filter-item">
-                                        <label class="filter-label green">
+                                        <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
+                                            Латунь
                                         </label>
                                     </li>
                                     <li class="filter-item">
-                                        <label class="filter-label purple">
+                                        <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
+                                            Нить
                                         </label>
                                     </li>
                                     <li class="filter-item">
-                                        <label class="filter-label gold">
+                                        <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label pink">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label orange">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label aqua">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label brown">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label bisque">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label grey">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
+                                            -
                                         </label>
                                     </li>
                                 </ul>
@@ -362,7 +362,7 @@ Products
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                 data-bs-toggle="collapse" data-bs-target="#filter-size">
-                                Size
+                                Цвет
                                 <span class="faq-heading-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
@@ -377,42 +377,56 @@ Products
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">XS</span>
+                                            <span class="filter-text">Белый</span>
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            S
+                                            Желтый
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            M
+                                            Красный
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            L
+                                            Серый
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            XL
+                                            Желтый, серый
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            XXL
+                                            Черный
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            Розовый
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            -
                                         </label>
                                     </li>
                                 </ul>
@@ -421,7 +435,7 @@ Products
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                 data-bs-toggle="collapse" data-bs-target="#filter-vendor">
-                                Vendor
+                                Проба
                                 <span class="faq-heading-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
@@ -436,63 +450,28 @@ Products
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Bynd</span>
+                                            <span class="filter-text">925</span>
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Huemor
+                                            585
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Jordan Crown
+                                            750
                                         </label>
                                     </li>
                                     <li class="filter-item">
                                         <label class="filter-label">
                                             <input type="checkbox" />
                                             <span class="filter-checkbox rounded me-2"></span>
-                                            Hubspot
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Ramotion
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Infosolutions
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Ideo
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Codal
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Salesforce
+                                            -
                                         </label>
                                     </li>
                                 </ul>
@@ -501,7 +480,7 @@ Products
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                 data-bs-toggle="collapse" data-bs-target="#filter-type">
-                                Product Type
+                                Бренд
                                 <span class="faq-heading-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
@@ -565,71 +544,48 @@ Products
                             </div>
                         </div>
                         <div class="filter-widget">
-                            <div
-                                class="filter-header faq-heading heading_18 d-flex align-items-center border-bottom">
-                                Related products
+                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                data-bs-toggle="collapse" data-bs-target="#filter-vendor">
+                                Размер
+                                <span class="faq-heading-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
                             </div>
-                            <div class="filter-related">
-                                <div class="related-item d-flex">
-                                    <div class="related-img-wrapper">
-                                        <img class="related-img" src="assets/img/products/furniture/21.jpg"
-                                            alt="img">
-                                    </div>
-                                    <div class="related-product-info">
-                                        <h2 class="related-heading heading_18">
-                                            <a href="/product">Tea Table</a>
-                                        </h2>
-                                        <div
-                                            class="related-review-icon product-icon-star d-flex align-items-center">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                        </div>
-                                        <p class="related-price text_16">$2,546</p>
-                                    </div>
-                                </div>
-                                <div class="related-item d-flex">
-                                    <div class="related-img-wrapper">
-                                        <img class="related-img" src="assets/img/products/furniture/22.jpg"
-                                            alt="img">
-                                    </div>
-                                    <div class="related-product-info">
-                                        <h2 class="related-heading heading_18">
-                                            <a href="/product">Comfy Sofa</a>
-                                        </h2>
-                                        <div
-                                            class="related-review-icon product-icon-star d-flex align-items-center">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                        </div>
-                                        <p class="related-price text_16">$1,526</p>
-                                    </div>
-                                </div>
-                                <div class="related-item d-flex">
-                                    <div class="related-img-wrapper">
-                                        <img class="related-img" src="assets/img/products/furniture/23.jpg"
-                                            alt="img">
-                                    </div>
-                                    <div class="related-product-info">
-                                        <h2 class="related-heading heading_18">
-                                            <a href="/product">Cusion Chair</a>
-                                        </h2>
-                                        <div
-                                            class="related-review-icon product-icon-star d-flex align-items-center">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                            <img src="assets/img/icon/star.png" alt="img">
-                                        </div>
-                                        <p class="related-price text_16">$1,235</p>
-                                    </div>
-                                </div>
+                            <div id="filter-vendor" class="accordion-collapse collapse show">
+                                <ul class="filter-lists list-unstyled mb-0">
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            <span class="filter-text">17</span>
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            18
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            16
+                                        </label>
+                                    </li>
+                                    <li class="filter-item">
+                                        <label class="filter-label">
+                                            <input type="checkbox" />
+                                            <span class="filter-checkbox rounded me-2"></span>
+                                            -
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="filter-widget">
@@ -643,4 +599,6 @@ Products
             </div>
         </div>
     </div>
+
+    <script src="{% static 'js/custom-filter.js' %}"></script>
 {% endblock %}

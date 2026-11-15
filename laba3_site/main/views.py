@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from django.db.models import Min, Max
 from .models import Product
 
 def index(request):
@@ -24,7 +26,39 @@ def checkout(request):
 
 def collection(request):
     products = Product.objects.all()
-    return render(request, 'collection-left-sidebar.html', {'products': products})
+
+    # 1. Получаем минимальную и максимальную цену из базы
+    price_stats = products.aggregate(min_price=Min('price'), max_price=Max('price'))
+    # Если товаров нет, ставим дефолтные значения
+    absolute_min = int(price_stats['min_price'] or 0)
+    absolute_max = int(price_stats['max_price'] or 10000)
+
+    # 2. Получаем выбранные пользователем значения из URL (GET-запроса)
+    current_min = request.GET.get('min_price')
+    current_max = request.GET.get('max_price')
+
+    # Если ползунки двигали, фильтруем товары
+    if current_min and current_max:
+        products = products.filter(price__gte=current_min, price__lte=current_max)
+    else:
+        # Если не двигали, ставим текущие значения равные крайним
+        current_min = absolute_min
+        current_max = absolute_max
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'total_products': products.count(),
+        'absolute_min': absolute_min,
+        'absolute_max': absolute_max,
+        'current_min': int(current_min),
+        'current_max': int(current_max),
+    }
+
+    return render(request, 'collection-left-sidebar.html', context)
 
 def contact(request):
     return render(request, 'contact.html')

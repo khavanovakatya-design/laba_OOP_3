@@ -1,0 +1,68 @@
+/* --- Стили для двойного ползунка цен --- */
+#min-price-range, 
+#max-price-range {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    pointer-events: none; /* Снимаем клики с фона ползунка */
+}
+
+/* Кругляшки ползунков для Chrome/Safari/Edge */
+#min-price-range::-webkit-slider-thumb, 
+#max-price-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #00234D;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto; /* Возвращаем клики самим кругляшкам */
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* Кругляшки ползунков для Firefox */
+#min-price-range::-moz-range-thumb, 
+#max-price-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #00234D;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* Обертка ползунка */
+.price-slider-wrapper {
+    height: 30px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.slider-track {
+    height: 4px;
+    background: #e0e0e0;
+    top: 13px;
+    border-radius: 2px;
+    position: absolute;
+    width: 100%;
+}
+
+.slider-range {
+    height: 4px;
+    background: #00234D;
+    top: 13px;
+    border-radius: 2px;
+    position: absolute;
+}
+
+#min-price-range, 
+#max-price-range {
+    position: absolute;
+    width: 100%;
+    top: 5px;
+    background: transparent;
+}
