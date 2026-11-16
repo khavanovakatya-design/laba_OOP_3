@@ -20,10 +20,15 @@
                         </div>
                         <div class="filter-sorting">
                             <div class="collection-sorting position-relative d-none d-lg-block">
-                                <div
-                                    class="sorting-header text_16 d-flex align-items-center justify-content-end">
-                                    <span class="sorting-title me-2">Sort by:</span>
-                                    <span class="active-sorting">Featured</span>
+                                <div class="sorting-header text_16 d-flex align-items-center justify-content-end">
+                                    <span class="sorting-title me-2">Сортировать по:</span>
+                                    <span class="active-sorting">
+                                        {% if current_sort == 'price_asc' %}цене (сначала дешевле)
+                                        {% elif current_sort == 'price_desc' %}цене (сначала дороже)
+                                        {% elif current_sort == 'name_asc' %}алфавиту (А-Я)
+                                        {% elif current_sort == 'name_desc' %}алфавиту (Я-А)
+                                        {% else %}популярности{% endif %}
+                                    </span>
                                     <span class="sorting-icon">
                                         <svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg"
                                             width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -34,16 +39,16 @@
                                     </span>
                                 </div>
                                 <ul class="sorting-lists list-unstyled m-0">
-                                    <li><a href="#" class="text_14">Featured</a></li>
-                                    <li><a href="#" class="text_14">Best Selling</a></li>
-                                    <li><a href="#" class="text_14">Alphabetically, A-Z</a></li>
-                                    <li><a href="#" class="text_14">Alphabetically, Z-A</a></li>
-                                    <li><a href="#" class="text_14">Price, low to high</a></li>
-                                    <li><a href="#" class="text_14">Price, high to low</a></li>
-                                    <li><a href="#" class="text_14">Date, old to new</a></li>
-                                    <li><a href="#" class="text_14">Date, new to old</a></li>
+                                    <!-- Ссылки сохраняют текущие фильтры (цена, категория) благодаря .urlencode -->
+                                    <li><a href="?{{ request.GET.urlencode }}&sort=popular" class="text_14 {% if current_sort == 'popular' %}fw-bold{% endif %}">популярности</a></li>
+                                    <li><a href="?{{ request.GET.urlencode }}&sort=name_asc" class="text_14 {% if current_sort == 'name_asc' %}fw-bold{% endif %}">алфавиту (А-Я)</a></li>
+                                    <li><a href="?{{ request.GET.urlencode }}&sort=name_desc" class="text_14 {% if current_sort == 'name_desc' %}fw-bold{% endif %}">алфавиту (Я-А)</a></li>
+                                    <li><a href="?{{ request.GET.urlencode }}&sort=price_asc" class="text_14 {% if current_sort == 'price_asc' %}fw-bold{% endif %}">цене (сначала дешевле)</a></li>
+                                    <li><a href="?{{ request.GET.urlencode }}&sort=price_desc" class="text_14 {% if current_sort == 'price_desc' %}fw-bold{% endif %}">цене (сначала дороже)</a></li>
                                 </ul>
                             </div>
+                            
+                            <!-- Мобильная кнопка фильтра (остается без изменений) -->
                             <div class="filter-drawer-trigger mobile-filter d-flex align-items-center d-lg-none">
                                 <span class="mobile-filter-icon me-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -70,23 +75,16 @@
 
                                         <!-- Блок бейджа (можно добавить условие, например, если цена со скидкой) -->
                                         
-                                        <div class="product-card-action product-card-action-2 justify-content-center">
-                                            <a href="#quickview-modal" class="action-card action-quickview" data-bs-toggle="modal">
-                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M10 0C15.5117 0 20 4.48828 20 10C20 12.3945 19.1602 14.5898 17.75 16.3125L25.7188 24.2812L24.2812 25.7188L16.3125 17.75C14.5898 19.1602 12.3945 20 10 20C4.48828 20 0 15.5117 0 10C0 4.48828 4.48828 0 10 0ZM10 2C5.57031 2 2 5.57031 2 10C2 14.4297 5.57031 18 10 18C14.4297 18 18 14.4297 18 10C18 5.57031 14.4297 2 10 2ZM11 6V9H14V11H11V14H9V11H6V9H9V6H11Z" fill="#00234D"/>
-                                                </svg>
-                                            </a>
-                                            <a href="#" class="action-card action-wishlist">
-                                                <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105ZM6.96429 1.82638C9.73912 1.82638 12.3036 4.48008 12.3036 4.48008L13 5.25051L13.6964 4.48008C13.6964 4.48008 16.2609 1.82638 19.0357 1.82638C21.8613 1.82638 24.1429 4.10557 24.1429 6.84843C24.1429 8.25732 22.4018 10.1584 22.4018 10.1584L13 19.4036L3.59821 10.1584C3.59821 10.1584 3.14844 9.73397 2.69866 9.07411C2.24888 8.41426 1.85714 7.55466 1.85714 6.84843C1.85714 4.10557 4.13867 1.82638 6.96429 1.82638Z" fill="#00234D"/>
-                                                </svg>
-                                            </a>
-                                            <a href="#" class="action-card action-addtocart">
-                                                <svg class="icon icon-cart" width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z" fill="#00234D"/>
-                                                </svg>
-                                            </a>
+                                        <!-- Плашки при наведении -->
+                                        <div class="product-card-action product-card-action-2">
+                                            <a href="#" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</a>
                                         </div>
+
+                                        <a href="/wishlist" class="wishlist-btn card-wishlist">
+                                            <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105ZM6.96429 1.82638C9.73912 1.82638 12.3036 4.48008 12.3036 4.48008L13 5.25051L13.6964 4.48008C13.6964 4.48008 16.2609 1.82638 19.0357 1.82638C21.8613 1.82638 24.1429 4.10557 24.1429 6.84843C24.1429 8.25732 22.4018 10.1584 22.4018 10.1584L13 19.4036L3.59821 10.1584C3.59821 10.1584 3.14844 9.73397 2.69866 9.07411C2.24888 8.41426 1.85714 7.55466 1.85714 6.84843C1.85714 4.10557 4.13867 1.82638 6.96429 1.82638Z" fill="black" />
+                                            </svg>
+                                        </a>
                                     </div>
                                     <div class="product-card-details">
                                         <!-- Выводим название товара -->
@@ -101,9 +99,6 @@
                                 </div>
                             </div>
                             {% empty %}
-                            <div class="col-12 text-center">
-                                <p>Товаров пока нет.</p>
-                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -168,7 +163,7 @@
                 <div class="col-lg-3 col-md-12 col-12">
                     <div class="collection-filter filter-drawer">
                         <div class="filter-widget d-lg-none d-flex align-items-center justify-content-between">
-                            <h5 class="heading_24">Filter By</h4>
+                            <h5 class="heading_24">Фильтр</h4>
                             <button type="button" class="btn-close text-reset filter-drawer-trigger d-lg-none"></button>
                         </div>
 
@@ -200,399 +195,164 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-price">
-                                Цена
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-price" class="accordion-collapse collapse show">
-                                
-                                <!-- ПОЛЯ ВВОДА -->
-                                <div class="filter-price d-flex align-items-center justify-content-between mb-3">
-                                    <div class="filter-field">
-                                        <input class="field-input" type="number" id="min-price-input" 
-                                            value="{{ current_min }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+
+                        <form method="get" action="" id="filter-form">
+
+                            <input type="hidden" name="sort" value="{{ current_sort }}">
+                            <!-- Цена -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-price">
+                                    Цена
+                                    <span class="faq-heading-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div id="filter-price" class="accordion-collapse collapse show">
+                                    <div class="filter-price d-flex align-items-center justify-content-between mb-3 mt-3">
+                                        <div class="filter-field">
+                                            <input class="field-input" type="number" name="price_min" id="min-price-input" 
+                                                value="{{ current_min }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+                                        </div>
+                                        <div class="filter-separator px-3">-</div>
+                                        <div class="filter-field">
+                                            <input class="field-input" type="number" name="price_max" id="max-price-input" 
+                                                value="{{ current_max }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+                                        </div>
                                     </div>
-                                    <div class="filter-separator px-3">-</div>
-                                    <div class="filter-field">
-                                        <input class="field-input" type="number" id="max-price-input" 
-                                            value="{{ current_max }}" min="{{ absolute_min }}" max="{{ absolute_max }}">
+                                    <div class="price-slider-wrapper position-relative" style="height: 30px; margin-bottom: 20px;">
+                                        <div class="slider-track position-absolute w-100" style="height: 4px; background: #e0e0e0; top: 13px; border-radius: 2px;"></div>
+                                        <div class="slider-range position-absolute" id="slider-range" style="height: 4px; background: #00234D; top: 13px; border-radius: 2px;"></div>
+                                        <input type="range" id="min-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" value="{{ current_min }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
+                                        <input type="range" id="max-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" value="{{ current_max }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- ПОЛЗУНОК -->
-                                <div class="price-slider-wrapper position-relative" style="height: 30px; margin-bottom: 20px;">
-                                    <!-- Фоновая линия -->
-                                    <div class="slider-track position-absolute w-100" style="height: 4px; background: #e0e0e0; top: 13px; border-radius: 2px;"></div>
-                                    
-                                    <!-- Активная часть (закрашивается между ползунками) -->
-                                    <div class="slider-range position-absolute" id="slider-range" style="height: 4px; background: #00234D; top: 13px; border-radius: 2px;"></div>
-
-                                    <!-- Ползунок Мин -->
-                                    <input type="range" id="min-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" 
-                                        value="{{ current_min }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
-                                    
-                                    <!-- Ползунок Макс -->
-                                    <input type="range" id="max-price-range" min="{{ absolute_min }}" max="{{ absolute_max }}" 
-                                        value="{{ current_max }}" class="position-absolute w-100" style="pointer-events: none; appearance: none; background: transparent; top: 5px;">
+                            <!-- Категории -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-cat">
+                                    Категория
+                                    <span class="faq-heading-icon"><svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
                                 </div>
+                                <div id="filter-cat" class="accordion-collapse collapse show">
+                                    <ul class="filter-lists list-unstyled mb-0 mt-3">
+                                        {% for cat in filter.form.category.field.queryset %}
+                                        <li class="filter-item">
+                                            <label class="filter-label">
+                                                <input type="checkbox" name="category" value="{{ cat.id }}" 
+                                                    {% if cat.id|stringformat:"s" in request.GET.category %}checked{% endif %}>
+                                                <span class="filter-checkbox rounded me-2"></span>
+                                                <span class="filter-text">{{ cat.name }}</span>
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
 
-                                <!-- Кнопка применить (если не хотите, чтобы применялось само при отпускании) -->
-                                <button class="btn btn-primary w-100" id="apply-price-filter" style="background-color: #00234D; color: white; padding: 8px; border-radius: 4px; border: none;">Применить</button>
+                            <!-- Металлы -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-metal">
+                                    Металл
+                                    <span class="faq-heading-icon"><svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                </div>
+                                <div id="filter-metal" class="accordion-collapse collapse show">
+                                    <ul class="filter-lists list-unstyled mb-0 mt-3">
+                                        {% for metal in filter.form.metal.field.queryset %}
+                                        <li class="filter-item">
+                                            <label class="filter-label">
+                                                <input type="checkbox" name="metal" value="{{ metal.id }}" 
+                                                    {% if metal.id|stringformat:"s" in request.GET.metal %}checked{% endif %}>
+                                                <span class="filter-checkbox rounded me-2"></span>
+                                                <span class="filter-text">{{ metal.name }}</span>
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-collection">
-                                Категория
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
+
+                            <!-- Цвета -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-color">
+                                    Цвет
+                                    <span class="faq-heading-icon"><svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                </div>
+                                <div id="filter-color" class="accordion-collapse collapse show">
+                                    <ul class="filter-lists list-unstyled mb-0 mt-3">
+                                        {% for color in filter.form.color.field.queryset %}
+                                        <li class="filter-item">
+                                            <label class="filter-label">
+                                                <input type="checkbox" name="color" value="{{ color.id }}" 
+                                                    {% if color.id|stringformat:"s" in request.GET.color %}checked{% endif %}>
+                                                <span class="filter-checkbox rounded me-2"></span>
+                                                <span class="filter-text">{{ color.name }}</span>
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                            <div id="filter-collection" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Браслет</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Брошь
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Ожерелье
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Колье
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Кольцо
-                                        </label>
-                                    </li>
-                                </ul>
+
+                            <!-- Бренды -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-vendor">
+                                    Бренд
+                                    <span class="faq-heading-icon"><svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                </div>
+                                <div id="filter-vendor" class="accordion-collapse collapse show">
+                                    <ul class="filter-lists list-unstyled mb-0 mt-3">
+                                        {% for vendor in filter.form.vendor.field.queryset %}
+                                        <li class="filter-item">
+                                            <label class="filter-label">
+                                                <input type="checkbox" name="vendor" value="{{ vendor.id }}" 
+                                                    {% if vendor.id|stringformat:"s" in request.GET.vendor %}checked{% endif %}>
+                                                <span class="filter-checkbox rounded me-2"></span>
+                                                <span class="filter-text">{{ vendor.name }}</span>
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-availability">
-                                Металл
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
+
+                            <!-- Размеры -->
+                            <div class="filter-widget">
+                                <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
+                                    data-bs-toggle="collapse" data-bs-target="#filter-size">
+                                    Размер
+                                    <span class="faq-heading-icon"><svg class="icon icon-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                                </div>
+                                <div id="filter-size" class="accordion-collapse collapse show">
+                                    <ul class="filter-lists list-unstyled mb-0 mt-3">
+                                        {% for size in filter.form.size.field.queryset %}
+                                        <li class="filter-item">
+                                            <label class="filter-label">
+                                                <input type="checkbox" name="size" value="{{ size.id }}" 
+                                                    {% if size.id|stringformat:"s" in request.GET.size %}checked{% endif %}>
+                                                <span class="filter-checkbox rounded me-2"></span>
+                                                <span class="filter-text">{{ size.name }}</span>
+                                            </label>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                            <div id="filter-availability" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Серебро</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Золото
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Нерж. сталь
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Латунь
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Нить
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            -
-                                        </label>
-                                    </li>
-                                </ul>
+
+                            <div class="filter-widget mt-4">
+                                <a href="/collection" class="btn btn-outline-secondary w-100" style="border-color: #00234D; color: #00234D;">Сбросить фильтры</a>
                             </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-size">
-                                Цвет
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-size" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Белый</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Желтый
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Красный
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Серый
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Желтый, серый
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Черный
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Розовый
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            -
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-vendor">
-                                Проба
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-vendor" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">925</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            585
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            750
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            -
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-type">
-                                Бренд
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-type" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Bodysuit</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Hoodie
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Jacket
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Legging
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Short
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Top
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            Underwear
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-widget">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                data-bs-toggle="collapse" data-bs-target="#filter-vendor">
-                                Размер
-                                <span class="faq-heading-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div id="filter-vendor" class="accordion-collapse collapse show">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">17</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            18
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            16
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            -
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-widget">
-                            <a href="/product">
-                                <img class="rounded" src="assets/img/banner/collection.jpg" alt="img">
-                            </a>
-                        </div>
+
+                        </form>
                     </div>
                 </div>
                 <!-- sidebar end -->
