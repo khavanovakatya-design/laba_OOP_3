@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Вход
+{% endblock %}
+
+{% block content %}
+    <div class="login-page mt-100">
+        <div class="container">
+            <div class="login-form common-form mx-auto" id="login-form">
+                <div class="section-header mb-3">
+                    <h2 class="section-heading text-center">Вход</h2>
+                </div>
+
+                {% if form.errors %}
+                    <div style="background: #ffdddd; color: #d8000c; padding: 15px; margin-bottom: 20px; border: 1px solid #d8000c; border-radius: 5px;">
+                        <strong>Ошибка:</strong> Неверный логин или пароль.
+                    </div>
+                {% endif %}
+
+                <form method="post" action="#login-form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Имя пользователя</label>
+                                <input type="text" name="username" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Пароль</label>
+                                <input type="password" name="password" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn-primary d-block mt-3 btn-signin">ВОЙТИ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

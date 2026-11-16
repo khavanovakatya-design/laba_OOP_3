@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Регистрация
+{% endblock %}
+
+{% block content %}
+    <div class="login-page mt-100">
+        <div class="container">
+            <div class="login-form common-form mx-auto" id="register-form">
+                <div class="section-header mb-3">
+                    <h2 class="section-heading text-center">Регистрация</h2>
+                </div>
+
+                {% if form.errors %}
+                    <div style="background: #ffdddd; color: #d8000c; padding: 15px; margin-bottom: 20px; border: 1px solid #d8000c; border-radius: 5px;">
+                        <strong>Пожалуйста, исправьте ошибки:</strong>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" action="#register-form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Имя пользователя (логин)</label>
+                                <input type="text" name="username" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Email</label>
+                                <input type="email" name="email" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Пароль</label>
+                                <input type="password" name="password1" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12">
+                            <fieldset>
+                                <label class="label">Подтвердите пароль</label>
+                                <input type="password" name="password2" required />
+                            </fieldset>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn-primary d-block mt-3 btn-signin">СОЗДАТЬ АККАУНТ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
