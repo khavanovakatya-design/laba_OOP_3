@@ -8,9 +8,9 @@ import os
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-    path('users/', include('users.urls')),
-    path('login/', RedirectView.as_view(url='/users/login/')),
-    path('register/', RedirectView.as_view(url='/users/register/')),
+    path('', include('users.urls')),
+    path('login/', RedirectView.as_view(url='/login')),
+    path('register/', RedirectView.as_view(url='/register')),
 ]
 
 if settings.DEBUG:
