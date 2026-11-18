@@ -1,152 +1,84 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
 
-{% block title %}
-Cart
-{% endblock %}
+{% block title %}Корзина{% endblock %}
 
 {% block content %}
-    <div class="cart-page mt-100">
-        <div class="container">
-            <div class="cart-page-wrapper">
-                <div class="row">
-                    <div class="col-lg-7 col-md-12 col-12">
-                        <table class="cart-table w-100">
-                            <thead>
-                                <tr>
-                                <th class="cart-caption heading_18">Product</th>
+<div class="cart-page mt-100">
+    <div class="container">
+        <div class="cart-page-wrapper">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-12">
+                    <table class="cart-table w-100">
+                        <thead>
+                            <tr>
+                                <th class="cart-caption heading_18">Товар</th>
                                 <th class="cart-caption heading_18"></th>
-                                <th class="cart-caption text-center heading_18 d-none d-md-table-cell">Quantity</th>
-                                <th class="cart-caption text-end heading_18">Price</th>
-                                </tr>
-                            </thead>
-                
-                            <tbody>
-                                <tr class="cart-item">
-                                    <td class="cart-item-media">
+                                <th class="cart-caption text-center heading_18 d-none d-md-table-cell">Кол-во</th>
+                                <th class="cart-caption text-end heading_18">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart.items.all %}
+                            <tr class="cart-item">
+                                <td class="cart-item-media">
                                     <div class="mini-img-wrapper">
-                                        <img class="mini-img" src="assets/img/products/furniture/1.jpg" alt="img">
-                                    </div>                                    
-                                    </td>
-                                    <td class="cart-item-details">
-                                    <h2 class="product-title"><a href="#">Eliot Reversible Sectional</a></h2>
-                                    <p class="product-vendor">XS / Dove Gray</p>                                   
-                                    </td>
-                                    <td class="cart-item-quantity">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="assets/img/icon/minus.svg"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="assets/img/icon/plus.svg"
-                                                alt="plus"></button>
+                                        <img class="mini-img" src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
                                     </div>
-                                    <a href="#" class="product-remove mt-2">Remove</a>                           
-                                    </td>
-                                    <td class="cart-item-price text-end">
-                                    <div class="product-price">$580.00</div>                           
-                                    </td>                        
-                                </tr>
-                                <tr class="cart-item">
-                                    <td class="cart-item-media">
-                                    <div class="mini-img-wrapper">
-                                        <img class="mini-img" src="assets/img/products/furniture/2.jpg" alt="img">
-                                    </div>                                    
-                                    </td>
-                                    <td class="cart-item-details">
-                                    <h2 class="product-title"><a href="#">Vita Lounge Chair</a></h2>
-                                    <p class="product-vendor">XS / Pink</p>                                   
-                                    </td>
-                                    <td class="cart-item-quantity">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="assets/img/icon/minus.svg"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="assets/img/icon/plus.svg"
-                                                alt="plus"></button>
-                                    </div>
-                                    <a href="#" class="product-remove mt-2">Remove</a>                           
-                                    </td>
-                                    <td class="cart-item-price text-end">
-                                    <div class="product-price">$580.00</div>                           
-                                    </td>
-                                </tr>
-                                <tr class="cart-item">
-                                    <td class="cart-item-media">
-                                    <div class="mini-img-wrapper">
-                                        <img class="mini-img" src="assets/img/products/furniture/3.jpg" alt="img">
-                                    </div>                                    
-                                    </td>
-                                    <td class="cart-item-details">
-                                    <h2 class="product-title"><a href="#">Sarno Dining Chair</a></h2>
-                                    <p class="product-vendor">XS / Dove Gray</p>                                  
-                                    </td>
-                                    <td class="cart-item-quantity">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="assets/img/icon/minus.svg"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="assets/img/icon/plus.svg"
-                                                alt="plus"></button>
-                                    </div>
-                                    <a href="#" class="product-remove mt-2">Remove</a>                           
-                                    </td>
-                                    <td class="cart-item-price text-end">
-                                    <div class="product-price">$580.00</div>                           
-                                    </td>                        
-                                </tr>
-                                <tr class="cart-item">
-                                    <td class="cart-item-media">
-                                    <div class="mini-img-wrapper">
-                                        <img class="mini-img" src="assets/img/products/furniture/4.jpg" alt="img">
-                                    </div>                                    
-                                    </td>
-                                    <td class="cart-item-details">
-                                    <h2 class="product-title"><a href="#">Eliot Reversible Sectional</a></h2>
-                                    <p class="product-vendor">XS / Dove Gray</p>                                  
-                                    </td>
-                                    <td class="cart-item-quantity">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="assets/img/icon/minus.svg"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="assets/img/icon/plus.svg"
-                                                alt="plus"></button>
-                                    </div>
-                                    <a href="#" class="product-remove mt-2">Remove</a>                           
-                                    </td>
-                                    <td class="cart-item-price text-end">
-                                    <div class="product-price">$580.00</div>                           
-                                    </td>                        
-                                </tr>
-                            </tbody>
-                            </table>
-                    </div>
-                    <div class="col-lg-5 col-md-12 col-12">
-                        <div class="cart-total-area">
-                            <h3 class="cart-total-title d-none d-lg-block mb-0">Cart Totals</h4>
-                            <div class="cart-total-box mt-4">
-                                <div class="subtotal-item subtotal-box">
-                                    <h4 class="subtotal-title">Subtotals:</h4>
-                                    <p class="subtotal-value">$465.00</p>
-                                </div>
-                                <div class="subtotal-item shipping-box">
-                                    <h4 class="subtotal-title">Shipping:</h4>
-                                    <p class="subtotal-value">$10.00</p>
-                                </div>
-                                <div class="subtotal-item discount-box">
-                                    <h4 class="subtotal-title">Discount:</h4>
-                                    <p class="subtotal-value">$100.00</p>
-                                </div>
-                                <hr />
-                                <div class="subtotal-item discount-box">
-                                    <h4 class="subtotal-title">Total:</h4>
-                                    <p class="subtotal-value">$1000.00</p>
-                                </div>
-                                <p class="shipping_text">Shipping & taxes calculated at checkout</p>
-                                <div class="d-flex justify-content-center mt-4">
-                                    <a href="/checkout" class="position-relative btn-primary text-uppercase">
-                                        Procced to checkout
-                                    </a>
-                                </div>
+                                </td>
+                                <td class="cart-item-details">
+                                    <h2 class="product-title"><a href="{% url 'product_detail' item.product.id %}">{{ item.product.title }}</a></h2>
+                                    <p class="product-vendor">{{ item.product.vendor.name }}</p>
+                                </td>
+                                <td class="cart-item-quantity">
+                                    <!-- Форма для изменения количества -->
+                                    <form method="post" action="{% url 'update_cart' item.id %}">
+                                        {% csrf_token %}
+                                        <div class="quantity d-flex align-items-center justify-content-between">
+                                            <button type="submit" name="quantity" value="{{ item.quantity|add:'-1' }}" class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}" alt="minus"></button>
+                                            <input class="qty-input" type="number" name="quantity" value="{{ item.quantity }}" min="1" onchange="this.form.submit()">
+                                            <button type="submit" name="quantity" value="{{ item.quantity|add:'1' }}" class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}" alt="plus"></button>
+                                        </div>
+                                    </form>
+                                    <a href="{% url 'remove_from_cart' item.id %}" class="product-remove mt-2">Удалить</a>
+                                </td>
+                                <td class="cart-item-price text-end">
+                                    <div class="product-price">{{ item.total_price|floatformat:0|intcomma }} ₽</div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <h3>Ваша корзина пуста 😔</h3>
+                                    <a href="/collection" class="btn-primary mt-4">Перейти в магазин</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-5 col-md-12 col-12">
+                    <div class="cart-total-area">
+                        <h3 class="cart-total-title d-none d-lg-block mb-0">Итого</h3>
+                        <div class="cart-total-box mt-4">
+                            <div class="subtotal-item subtotal-box">
+                                <h4 class="subtotal-title">Товаров ({{ cart.total_items }}):</h4>
+                                <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
+                            </div>
+                            <div class="subtotal-item shipping-box">
+                                <h4 class="subtotal-title">Доставка:</h4>
+                                <p class="subtotal-value">Рассчитывается при оформлении</p>
+                            </div>
+                            <hr />
+                            <div class="subtotal-item discount-box">
+                                <h4 class="subtotal-title">К оплате:</h4>
+                                <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4">
+                                <a href="/checkout" class="position-relative btn-primary text-uppercase">
+                                    Оформить заказ
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -154,4 +86,5 @@ Cart
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

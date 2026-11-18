@@ -44,12 +44,26 @@
                                 <input type="email" name="email" required />
                             </fieldset>
                         </div>
+                        
+                        <!-- Поле пароля и требования к нему -->
                         <div class="col-12">
                             <fieldset>
                                 <label class="label">Пароль</label>
                                 <input type="password" name="password1" required />
+                                
+                                <div class="password-requirements" style="margin-top: 10px; margin-bottom: 15px; font-size: 0.85em; color: #777; line-height: 1.6;">
+                                    <ul style="padding-left: 20px; margin: 0; list-style-type: disc;">
+                                        <li>Минимум 8 символов</li>
+                                        <li>Хотя бы одна заглавная буква</li>
+                                        <li>Хотя бы одна строчная буква</li>
+                                        <li>Хотя бы одна цифра</li>
+                                        <li>Хотя бы один спецсимвол (!@#$%^&* и т.д.)</li>
+                                        <li>Без пробелов</li>
+                                    </ul>
+                                </div>
                             </fieldset>
                         </div>
+                        
                         <div class="col-12">
                             <fieldset>
                                 <label class="label">Подтвердите пароль</label>

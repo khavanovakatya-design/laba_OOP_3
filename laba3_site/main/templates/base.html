@@ -167,10 +167,17 @@
                                         <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105ZM6.96429 1.82638C9.73912 1.82638 12.3036 4.48008 12.3036 4.48008L13 5.25051L13.6964 4.48008C13.6964 4.48008 16.2609 1.82638 19.0357 1.82638C21.8613 1.82638 24.1429 4.10557 24.1429 6.84843C24.1429 8.25732 22.4018 10.1584 22.4018 10.1584L13 19.4036L3.59821 10.1584C3.59821 10.1584 3.14844 9.73397 2.69866 9.07411C2.24888 8.41426 1.85714 7.55466 1.85714 6.84843C1.85714 4.10557 4.13867 1.82638 6.96429 1.82638Z" fill="black" />
                                     </svg>
                                 </a>
-                                <a class="header-action-item header-cart ms-4" href="#drawer-cart" data-bs-toggle="offcanvas">
-                                    <svg class="icon icon-cart" width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z" fill="black" />
+                                <a class="header-action-item header-cart ms-4 position-relative" href="/cart/">
+                                    <svg class="icon icon-cart" width="24" height="26" viewBox="0 0 24 26" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
+                                            fill="black" />
                                     </svg>
+                                    <!-- Счетчик -->
+                                    <span class="cart-badge" style="position: absolute; top: -8px; right: -10px; background: #F76B6A; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">
+                                        {{ global_cart.total_items|default:0 }}
+                                    </span>
                                 </a>
                                 <a class="header-action-item header-hamburger ms-4 d-lg-none" href="#drawer-menu" data-bs-toggle="offcanvas">
                                     <svg class="icon icon-hamburger" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -602,123 +609,6 @@
                             </ul>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="drawer-cart">
-            <div class="offcanvas-header border-btm-black">
-                <h5 class="cart-drawer-heading text_16">Your Cart (04)</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body p-0">
-                <div class="cart-content-area d-flex justify-content-between flex-column">
-                    <div class="minicart-loop custom-scrollbar">
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/1.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Eliot Reversible Sectional</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}" alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}" alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/2.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Vita Lounge Chair</a></h2>
-                                <p class="product-vendor">XS / Pink</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}" alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}" alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/3.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Sarno Dining Chair</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}" alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}" alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/4.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Vita Lounge Chair</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}" alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}" alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="minicart-footer">
-                        <div class="minicart-calc-area">
-                            <div class="minicart-calc d-flex align-items-center justify-content-between">
-                                <span class="cart-subtotal mb-0">Subtotal</span>
-                                <span class="cart-subprice">$1548.00</span>
-                            </div>
-                            <p class="cart-taxes text-center my-4">Taxes and shipping will be calculated at checkout.</p>
-                        </div>
-                        <div class="minicart-btn-area d-flex align-items-center justify-content-between">
-                            <a href="/cart" class="minicart-btn btn-secondary">View Cart</a>
-                            <a href="/checkout" class="minicart-btn btn-primary">Checkout</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart-empty-area text-center py-5 d-none">
-                    <div class="cart-empty-icon pb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
-                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                        </svg>
-                    </div>
-                    <p class="cart-empty">You have no items in your cart</p>
                 </div>
             </div>
         </div>

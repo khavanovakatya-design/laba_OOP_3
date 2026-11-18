@@ -270,14 +270,17 @@
                                             fill="black" />
                                     </svg>
                                 </a>
-                                <a class="header-action-item header-cart ms-4" href="#drawer-cart"
-                                    data-bs-toggle="offcanvas">
+                                <a class="header-action-item header-cart ms-4 position-relative" href="/cart/">
                                     <svg class="icon icon-cart" width="24" height="26" viewBox="0 0 24 26" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
                                             fill="black" />
                                     </svg>
+                                    <!-- Счетчик -->
+                                    <span class="cart-badge" style="position: absolute; top: -8px; right: -10px; background: #F76B6A; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">
+                                        {{ global_cart.total_items|default:0 }}
+                                    </span>
                                 </a>
                                 <a class="header-action-item header-hamburger ms-4 d-lg-none" href="#drawer-menu"
                                     data-bs-toggle="offcanvas">
@@ -430,8 +433,12 @@
                                     </div>
                                 </div>
 
-                                <form class="product-form" action="#">
+                                <form class="product-form ajax-add-to-cart" action="{% url 'add_to_cart' product.id %}" method="post">
+                                    {% csrf_token %}
                                     <div class="product-form-buttons d-flex align-items-center justify-content-between mt-4">
+                                        <!-- Важно: name="quantity" чтобы Django знал, сколько товаров добавить -->
+                                        <input type="number" name="quantity" value="1" min="1" class="d-none" id="product-qty-input">
+                                        
                                         <button type="submit" class="position-relative btn-atc btn-add-to-cart loader">В КОРЗИНУ</button>
                                         <a href="/wishlist" class="product-wishlist">
                                             <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -439,10 +446,14 @@
                                             </svg>
                                         </a>
                                     </div>
-                                    <div class="buy-it-now-btn mt-2">
+                                </form>
+                                <div class="buy-it-now-btn mt-2">
+                                    <form action="{% url 'add_to_cart' product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
                                         <button type="submit" class="position-relative btn-atc btn-buyit-now">КУПИТЬ СЕЙЧАС</button>
-                                    </div>
-                                </form>                              
+                                    </form>
+                                </div>                       
                             </div>
                         </div>
                     </div>
@@ -532,7 +543,11 @@
                                     </a>
 
                                     <div class="product-card-action product-card-action-2">
-                                        <a href="#" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</a>
+                                            <form action="{% url 'add_to_cart' rel_product.id %}" method="post" class="w-100 ajax-add-to-cart">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</button>
+                                            </form>
                                     </div>
 
                                     <a href="/wishlist" class="wishlist-btn card-wishlist">
@@ -1167,145 +1182,11 @@
             </div>
         </div>
         <!-- drawer menu end -->
-
-        <!-- drawer cart start -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="drawer-cart">
-            <div class="offcanvas-header border-btm-black">
-                <h5 class="cart-drawer-heading text_16">Your Cart (04)</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                    aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body p-0">
-                <div class="cart-content-area d-flex justify-content-between flex-column">
-                    <div class="minicart-loop custom-scrollbar">
-                        <!-- minicart item -->
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/1.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Eliot Reversible Sectional</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}"
-                                                alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- minicart item -->
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/2.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Vita Lounge Chair</a></h2>
-                                <p class="product-vendor">XS / Pink</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}"
-                                                alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- minicart item -->
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/3.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Sarno Dining Chair</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}"
-                                                alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- minicart item -->
-                        <div class="minicart-item d-flex">
-                            <div class="mini-img-wrapper">
-                                <img class="mini-img" src="{% static 'img/products/furniture/4.jpg' %}" alt="img">
-                            </div>
-                            <div class="product-info">
-                                <h2 class="product-title"><a href="#">Vita Lounge Chair</a></h2>
-                                <p class="product-vendor">XS / Dove Gray</p>
-                                <div class="misc d-flex align-items-end justify-content-between">
-                                    <div class="quantity d-flex align-items-center justify-content-between">
-                                        <button class="qty-btn dec-qty"><img src="{% static 'img/icon/minus.svg' %}"
-                                                alt="minus"></button>
-                                        <input class="qty-input" type="number" name="qty" value="1" min="0">
-                                        <button class="qty-btn inc-qty"><img src="{% static 'img/icon/plus.svg' %}"
-                                                alt="plus"></button>
-                                    </div>
-                                    <div class="product-remove-area d-flex flex-column align-items-end">
-                                        <div class="product-price">$580.00</div>
-                                        <a href="#" class="product-remove">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="minicart-footer">
-                        <div class="minicart-calc-area">
-                            <div class="minicart-calc d-flex align-items-center justify-content-between">
-                                <span class="cart-subtotal mb-0">Subtotal</span>
-                                <span class="cart-subprice">$1548.00</span>
-                            </div>
-                            <p class="cart-taxes text-center my-4">Taxes and shipping will be calculated at checkout.
-                            </p>
-                        </div>
-                        <div class="minicart-btn-area d-flex align-items-center justify-content-between">
-                            <a href="/cart" class="minicart-btn btn-secondary">View Cart</a>
-                            <a href="/checkout" class="minicart-btn btn-primary">Checkout</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart-empty-area text-center py-5 d-none">
-                    <div class="cart-empty-icon pb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
-                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                        </svg>
-                    </div>
-                    <p class="cart-empty">You have no items in your cart</p>
-                </div>
-            </div>
-        </div>
-        <!-- drawer cart end -->
         
         <!-- all js -->
         <script src="{% static 'js/vendor.js' %}"></script>
         <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/cart.js' %}"></script>
     </div>
 </body>
 

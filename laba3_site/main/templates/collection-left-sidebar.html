@@ -77,7 +77,11 @@
                                         
                                         <!-- Плашки при наведении -->
                                         <div class="product-card-action product-card-action-2">
-                                            <a href="#" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</a>
+                                            <form action="{% url 'add_to_cart' product.id %}" method="post" class="w-100 ajax-add-to-cart">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</button>
+                                            </form>
                                         </div>
 
                                         <a href="/wishlist" class="wishlist-btn card-wishlist">
@@ -86,10 +90,10 @@
                                             </svg>
                                         </a>
                                     </div>
-                                    <div class="product-card-details">
+                                    <div class="product-card-details text-center" >
                                         <!-- Выводим название товара -->
-                                        <h3 class="product-card-title">
-                                            <a href="/product">{{ product.title }}</a>
+                                        <h3 class="product-card-title" href="{% url 'product_detail' product.id %}">
+                                            <a href="{% url 'product_detail' product.id %}">{{ product.title }}</a>
                                         </h3>
                                         <!-- Выводим цену товара -->
                                         <div class="product-card-price">
@@ -361,4 +365,5 @@
     </div>
 
     <script src="{% static 'js/custom-filter.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}
