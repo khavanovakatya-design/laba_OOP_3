@@ -140,3 +140,65 @@ def update_cart(request, item_id):
     else:
         item.delete()
     return redirect('cart')
+
+from .forms import PasswordResetRequestForm, PasswordResetConfirmForm
+from .models import PasswordResetCode
+
+def password_reset_request_view(request):
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                messages.error(request, "Пользователь с такой почтой не найден.")
+                return render(request, 'users/password_reset_request.html', {'form': form})
+            
+            code = str(random.randint(1000, 9999))
+            PasswordResetCode.objects.update_or_create(user=user, defaults={'code': code})
+
+            subject = 'Сброс пароля'
+            message = f'Здравствуйте!\n\nВаш код для сброса пароля: {code}'
+            
+            try:
+                send_mail(
+                    subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False,
+                )
+                request.session['reset_user_id'] = user.id
+                return redirect('password_reset_confirm')
+            except Exception as e:
+                messages.error(request, f'Ошибка отправки: {e}')
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, 'users/password_reset_request.html', {'form': form})
+
+def password_reset_confirm_view(request):
+    user_id = request.session.get('reset_user_id')
+    if not user_id:
+        return redirect('password_reset_request')
+
+    if request.method == 'POST':
+        form = PasswordResetConfirmForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            new_password = form.cleaned_data['new_password1']
+            try:
+                user = User.objects.get(id=user_id)
+                reset_code = PasswordResetCode.objects.get(user=user)
+
+                if reset_code.code == code:
+                    user.set_password(new_password)
+                    user.save()
+                    reset_code.delete()
+                    del request.session['reset_user_id']
+                    messages.success(request, 'Пароль успешно изменен! Теперь вы можете войти.')
+                    return redirect('login')
+                else:
+                    messages.error(request, "Неверный код.")
+            except (User.DoesNotExist, PasswordResetCode.DoesNotExist):
+                return redirect('password_reset_request')
+    else:
+        form = PasswordResetConfirmForm()
+    
+    return render(request, 'users/password_reset_confirm.html', {'form': form})

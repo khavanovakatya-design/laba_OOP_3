@@ -98,7 +98,7 @@ STATICFILES_DIRS = [
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "BACKEND": "users.email_backend.EmailBackend",
         "OPTIONS": {
             "host": "smtp.mail.ru",
             "port": 465,
