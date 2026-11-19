@@ -11,6 +11,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('login', user_views.login_view, name='login'),
     path('register', user_views.register_view, name='register'),
+    path('verify', user_views.verify_email_view, name='verify_email'),  # <-- ДОБАВИЛИ ЭТУ СТРОКУ
     path('logout', user_views.logout_view, name='logout'),
     path('profile', user_views.profile_view, name='profile'),
 ]
