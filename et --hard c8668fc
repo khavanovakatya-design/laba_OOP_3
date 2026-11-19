@@ -1,0 +1,40 @@
+[33ma2223b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to a2223b393b4fd9cf2f3421b686542a27eb6f7bf5
+[33ma2223b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: checkout: moving from cf955dd7edeb0fbbe418d0df2c3688d2203a2e32 to main
+[33mcf955dd[m HEAD@{2}: commit: Добавила регистрацию с подтверждением почты
+[33mc8668fc[m HEAD@{3}: reset: moving to origin/main
+[33me16a860[m HEAD@{4}: commit: Добавил регистрацию, почту и корзину
+[33mc8668fc[m HEAD@{5}: pull origin main --rebase (start): checkout c8668fc0e0d3fe689b19743dceebad319e9aafa4
+[33ma2223b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{6}: rebase (abort): returning to refs/heads/main
+[33m5bbab59[m HEAD@{7}: commit: Добавил регистрацию с подтверждением почты и исправил конфликты
+[33mc8668fc[m HEAD@{8}: pull origin main --rebase (start): checkout c8668fc0e0d3fe689b19743dceebad319e9aafa4
+[33ma2223b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{9}: commit: Добавил регистрацию с подтверждением почты и отправку писем
+[33m9670a20[m HEAD@{10}: commit: Добавил валидатор паролей и подсказки в форму регистрации
+[33m57ef82a[m HEAD@{11}: commit: Объединила проект: регистрация, вход, личный кабинет и основной сайт. Настроены маршруты и статика
+[33m90f57cd[m HEAD@{12}: commit: Добавлена миграция для модели Profile
+[33m50fc8c0[m HEAD@{13}: commit: Обновление структуры проекта
+[33mdb1be18[m HEAD@{14}: commit: Объединила проекты: регистрация, вход, личный кабинет и основной сайт. Исправлены пути к статике
+[33m7d02c7f[m HEAD@{15}: pull origin main: Fast-forward
+[33m2673915[m HEAD@{16}: commit: Исправлены ссылки в шапке сайта и добавлен личный кабинет
+[33m7ae55e5[m HEAD@{17}: commit: Добавлен рабочий личный кабинет пользователя
+[33m7743524[m HEAD@{18}: reset: moving to 7743524
+[33m34aa4ac[m HEAD@{19}: reset: moving to HEAD
+[33m34aa4ac[m HEAD@{20}: reset: moving to HEAD
+[33m34aa4ac[m HEAD@{21}: reset: moving to HEAD
+[33m34aa4ac[m HEAD@{22}: commit: Сделана регистрация, вход и личный кабинет
+[33m7743524[m HEAD@{23}: pull origin main --allow-unrelated-histories: updating HEAD
+[33m7743524[m HEAD@{24}: reset: moving to HEAD
+[33m7743524[m HEAD@{25}: reset: moving to HEAD
+[33m7743524[m HEAD@{26}: reset: moving to HEAD
+[33m7743524[m HEAD@{27}: reset: moving to HEAD
+[33m7743524[m HEAD@{28}: reset: moving to HEAD
+[33m7743524[m HEAD@{29}: reset: moving to HEAD
+[33m7743524[m HEAD@{30}: reset: moving to HEAD
+[33m7743524[m HEAD@{31}: reset: moving to HEAD
+[33m7743524[m HEAD@{32}: commit: Добавлена регистрация, вход и личный кабинет пользователей
+[33m0ea3b7c[m HEAD@{33}: commit: добавила общий аккаунт
+[33m8043f4e[m HEAD@{34}: reset: moving to 8043f4e
+[33m8f32ad4[m HEAD@{35}: commit: Добавил только аккаунт администратора
+[33m8043f4e[m HEAD@{36}: reset: moving to HEAD~1
+[33m6811daf[m HEAD@{37}: commit (merge): добавила админ аккаунт
+[33m8043f4e[m HEAD@{38}: checkout: moving from master to main
+[33m6e37183[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{39}: commit (initial): Account

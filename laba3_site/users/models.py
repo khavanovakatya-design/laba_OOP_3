@@ -17,17 +17,14 @@ class Cart(models.Model):
     def __str__(self):
         return f"Корзина {self.user.username}"
 
-    # Свойство для подсчета общей суммы
     @property
     def total_price(self):
         return sum(item.total_price for item in self.items.all())
 
-    # Свойство для подсчета количества товаров
     @property
     def total_items(self):
         return sum(item.quantity for item in self.items.all())
 
-# 2. Товар в корзине
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -36,7 +33,22 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.product.title} ({self.quantity} шт.)"
 
-    # Свойство для подсчета стоимости позиции (цена * количество)
     @property
     def total_price(self):
         return self.product.price * self.quantity
+
+class EmailVerification(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Код {self.code} для {self.user.username}"
+
+class PasswordResetCode(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Сброс пароля для {self.user.username}"

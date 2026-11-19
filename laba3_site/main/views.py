@@ -1,6 +1,9 @@
 from django.shortcuts import *
 from django.core.paginator import Paginator
 from django.db.models import Min, Max
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.models import User
 from .models import Product
 from .filters import ProductFilter
 
@@ -78,3 +81,43 @@ def product(request, product_id):
 
 def wishlist(request):
     return render(request, 'wishlist.html')
+
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 != password2:
+            return render(request, 'users/register.html', {'error': 'Пароли не совпадают'})
+
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        user.save()
+
+        subject = 'Подтверждение регистрации'
+        message = f'Здравствуйте, {username}!\n\nВы успешно зарегистрировались на нашем сайте. Ваш логин: {username}.'
+        
+        domain = email.split('@')[-1].lower()
+        
+        if 'gmail' in domain:
+            mail_backend = 'gmail'
+        elif 'yandex' in domain:
+            mail_backend = 'yandex'
+        elif 'mail.ru' in domain or 'bk.ru' in domain or 'list.ru' in domain or 'inbox.ru' in domain:
+            mail_backend = 'mailru'
+        else:
+            mail_backend = 'default'
+
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+            using=mail_backend,
+        )
+
+        return redirect('login') 
+
+    return render(request, 'users/register.html')

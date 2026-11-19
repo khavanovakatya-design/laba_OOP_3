@@ -19,3 +19,19 @@ class RegisterForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     pass
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="Email", max_length=254)
+
+class PasswordResetConfirmForm(forms.Form):
+    code = forms.CharField(label="Код из письма", max_length=4)
+    new_password1 = forms.CharField(label="Новый пароль", widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label="Подтвердите пароль", widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("new_password1")
+        password2 = cleaned_data.get("new_password2")
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Пароли не совпадают.")
+        return cleaned_data
