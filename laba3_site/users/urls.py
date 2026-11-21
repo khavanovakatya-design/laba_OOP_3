@@ -13,5 +13,7 @@ urlpatterns = [
     path('cart/update/<int:item_id>/', views.update_cart, name='update_cart'),
     path('checkout', views.checkout, name='checkout'),
     path('checkout/success/', views.checkout_success, name='checkout_success'),
-    path('my-orders/', views.order_history, name='order_history')
+    path('my-orders/', views.order_history, name='order_history'),
+    path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
+    path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
 ]

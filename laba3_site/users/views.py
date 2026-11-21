@@ -87,6 +87,7 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
     
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
@@ -97,7 +98,7 @@ def profile_view(request):
     else:
         form = UserProfileForm(instance=profile)
     
-    return render(request, 'users/profile.html', {'form': form, 'profile': profile})
+    return render(request, 'users/profile.html', {'form': form, 'profile': profile, 'orders': orders})
 
 @login_required
 def add_to_cart(request, product_id):
@@ -170,7 +171,6 @@ def checkout_success(request):
         cart = Cart.objects.filter(user=request.user).first()
         
         if cart and cart.items.exists():
-            # 1. Создаем заказ
             order = Order.objects.create(
                 user=request.user,
                 first_name=request.POST.get('first_name', ''),
@@ -184,7 +184,6 @@ def checkout_success(request):
                 total_price=cart.total_price
             )
 
-            # 2. Переносим товары из корзины в заказ
             for item in cart.items.all():
                 OrderItem.objects.create(
                     order=order,
@@ -193,17 +192,14 @@ def checkout_success(request):
                     quantity=item.quantity
                 )
             
-            # 3. Очищаем корзину
             cart.items.all().delete()
 
-            # Отправляем на страницу успеха
             return render(request, 'checkout-end.html', {'order': order})
             
     return redirect('cart')
 
 @login_required
 def order_history(request):
-    # Получаем все заказы текущего пользователя, сортируем по дате (сначала новые)
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'users/order_history.html', {'orders': orders})
 

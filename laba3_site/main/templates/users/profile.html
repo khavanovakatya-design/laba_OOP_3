@@ -10,11 +10,16 @@
             <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm border-0" style="border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
                     <div class="card-body text-center pt-5 pb-4">
+                        
                         <div class="position-relative d-inline-block mb-3">
-                            {% if profile.avatar %}
-                                <img src="{{ profile.avatar.url }}" alt="Аватар" class="rounded-circle shadow" style="width: 140px; height: 140px; object-fit: cover; border: 4px solid #fff;">
+                            {% if profile.avatar and profile.avatar.name %}
+                                <img src="{{ profile.avatar.url }}?t={% now 'U' %}" alt="Аватар" class="rounded-circle shadow" style="width: 140px; height: 140px; object-fit: cover; border: 4px solid #fff;">
                             {% else %}
-                                <img src="{% static 'img/default-avatar.png' %}" alt="Аватар по умолчанию" class="rounded-circle shadow" style="width: 140px; height: 140px; object-fit: cover; background: #eee; border: 4px solid #fff;">
+                                <div class="rounded-circle shadow d-flex align-items-center justify-content-center bg-secondary bg-opacity-25" style="width: 140px; height: 140px; border: 4px solid #fff;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#adb5bd" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                    </svg>
+                                </div>
                             {% endif %}
                             <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" style="width: 25px; height: 25px;" title="Онлайн"></span>
                         </div>
@@ -32,7 +37,10 @@
                     <div class="card-header bg-white border-0 pt-4 pb-0">
                         <ul class="nav nav-tabs border-bottom-0" id="profileTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active fw-bold text-dark fs-5 px-4" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="true">Настройки профиля</button>
+                                <button class="nav-link active fw-bold text-dark fs-5 px-4" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="true">Настройки</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-bold text-muted fs-5 px-4" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false">Мои заказы</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link fw-bold text-muted fs-5 px-4" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">Безопасность</button>
@@ -53,22 +61,19 @@
                         {% endif %}
 
                         <div class="tab-content" id="profileTabsContent">
+                            
                             <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                                 <form method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    
-                                    <!-- Аватар -->
+
                                     <div class="mb-4 bg-light p-3 rounded" style="border: 1px dashed #ccc;">
-                                        <label class="form-label font-weight-bold d-block mb-3">Обновить фотографию</label>
-                                        <div class="d-flex align-items-center gap-4">
-                                            {{ form.avatar }}
-                                            {% if form.avatar.errors %}
-                                                <div class="text-danger small mt-1">{{ form.avatar.errors }}</div>
-                                            {% endif %}
-                                        </div>
+                                        <label class="form-label font-weight-bold d-block mb-2">Фотография профиля</label>
+                                        {{ form.avatar }}
+                                        {% if form.avatar.errors %}
+                                            <div class="text-danger small mt-2">{{ form.avatar.errors }}</div>
+                                        {% endif %}
                                     </div>
 
-                                    <!-- Логин -->
                                     <div class="mb-3">
                                         <label class="form-label font-weight-bold">Имя пользователя (Логин)</label>
                                         {{ form.username }}
@@ -77,7 +82,6 @@
                                         {% endif %}
                                     </div>
 
-                                    <!-- Личные данные (в две колонки, как в checkout) -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label font-weight-bold">Фамилия</label>
@@ -113,7 +117,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- О себе -->
                                     <div class="mb-4">
                                         <label class="form-label font-weight-bold">О себе</label>
                                         {{ form.bio }}
@@ -121,6 +124,46 @@
 
                                     <button type="submit" class="btn btn-primary px-5 py-2 fw-bold text-white" style="border-radius: 10px; background-color: #001f3f; border-color: #001f3f; transition: 0.3s;" onmouseover="this.style.backgroundColor='#003366'" onmouseout="this.style.backgroundColor='#001f3f'">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
                                 </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                {% if orders %}
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>№ Заказа</th>
+                                                    <th>Дата</th>
+                                                    <th>Сумма</th>
+                                                    <th>Статус</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for order in orders %}
+                                                <tr>
+                                                    <td class="fw-bold">#{{ forloop.counter }}</td>
+                                                    <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                                                    <td>{{ order.total_price }} ₽</td>
+                                                    <td>
+                                                        <span class="badge bg-success">Оплачен</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'order_history' %}" class="btn btn-sm btn-outline-dark">Детали</a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-box-open text-muted mb-3" style="font-size: 50px;"></i>
+                                        <h5 class="fw-bold">У вас пока нет заказов</h5>
+                                        <p class="text-muted mb-4">Самое время что-нибудь купить!</p>
+                                        <a href="/collection" class="btn btn-primary px-4 py-2 fw-bold text-white" style="border-radius: 10px; background-color: #001f3f; border-color: #001f3f;">ПЕРЕЙТИ В КАТАЛОГ</a>
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
