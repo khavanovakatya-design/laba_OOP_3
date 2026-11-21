@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, PasswordResetRequestForm, PasswordResetConfirmForm, UserProfileForm
 from main.models import Product
-from .models import Cart, CartItem, EmailVerification, PasswordResetCode, Profile
+from .models import Cart, CartItem, EmailVerification, PasswordResetCode, Profile, Order, OrderItem
 
 def register_view(request):
     if request.method == 'POST':
@@ -92,7 +92,7 @@ def profile_view(request):
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Профиль успешно обновлен!')
+            messages.success(request, "Профиль успешно обновлен!", extra_tags='profile')
             return redirect('profile')
     else:
         form = UserProfileForm(instance=profile)
@@ -152,6 +152,60 @@ def update_cart(request, item_id):
     else:
         item.delete()
     return redirect('cart')
+
+@login_required
+def checkout(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    context = {
+        'cart': cart,
+        'profile': profile
+    }
+    return render(request, 'checkout.html', context)
+
+@login_required
+def checkout_success(request):
+    if request.method == 'POST':
+        cart = Cart.objects.filter(user=request.user).first()
+        
+        if cart and cart.items.exists():
+            # 1. Создаем заказ
+            order = Order.objects.create(
+                user=request.user,
+                first_name=request.POST.get('first_name', ''),
+                last_name=request.POST.get('last_name', ''),
+                phone=request.POST.get('phone', ''),
+                email=request.POST.get('email', ''),
+                region=request.POST.get('region', ''),
+                address=request.POST.get('address', ''),
+                city=request.POST.get('city', ''),
+                postal_code=request.POST.get('postal_code', ''),
+                total_price=cart.total_price
+            )
+
+            # 2. Переносим товары из корзины в заказ
+            for item in cart.items.all():
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    price=item.product.price,
+                    quantity=item.quantity
+                )
+            
+            # 3. Очищаем корзину
+            cart.items.all().delete()
+
+            # Отправляем на страницу успеха
+            return render(request, 'checkout-end.html', {'order': order})
+            
+    return redirect('cart')
+
+@login_required
+def order_history(request):
+    # Получаем все заказы текущего пользователя, сортируем по дате (сначала новые)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'users/order_history.html', {'orders': orders})
 
 def password_reset_request_view(request):
     if request.method == 'POST':

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Мои заказы{% endblock %}
+
+{% block content %}
+<div class="container mt-100 mb-100">
+    <h2 class="mb-4">История заказов</h2>
+
+    {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm border-0" style="border-radius: 10px;">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-bottom: 1px solid #eee;">
+                        <div>
+                            <h5 class="mb-0">Заказ №{{ order.id }}</h5>
+                            <small class="text-muted">от {{ order.created_at|date:"d E Y, H:i" }}</small>
+                        </div>
+                        <div>
+                            <!-- Вывод статуса с цветом -->
+                            {% if order.status == 'new' %}
+                                <span class="badge bg-primary">Новый</span>
+                            {% elif order.status == 'processing' %}
+                                <span class="badge bg-warning text-dark">В обработке</span>
+                            {% elif order.status == 'shipped' %}
+                                <span class="badge bg-info text-dark">Отправлен</span>
+                            {% elif order.status == 'delivered' %}
+                                <span class="badge bg-success">Доставлен</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <strong>Товары:</strong>
+                                <ul class="list-unstyled mt-2">
+                                    {% for item in order.items.all %}
+                                    <li class="d-flex justify-content-between mb-1">
+                                        <span>{{ item.product.title }} <span class="text-muted">x{{ item.quantity }}</span></span>
+                                        <span>{{ item.total_price|floatformat:0|intcomma }} ₽</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <p class="mb-1"><strong>Сумма:</strong> {{ order.total_price|floatformat:0|intcomma }} ₽</p>
+                                <p class="mb-0 text-muted small">
+                                    {{ order.region }}, {{ order.city }}, {{ order.address }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <h4 class="text-muted">У вас пока нет заказов 😔</h4>
+            <a href="/collection" class="btn btn-primary mt-3">Перейти в магазин</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -43,10 +43,12 @@
                     <div class="card-body p-4">
                         {% if messages %}
                             {% for message in messages %}
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
+                                {% if 'profile' in message.tags %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
 
@@ -55,6 +57,7 @@
                                 <form method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     
+                                    <!-- Аватар -->
                                     <div class="mb-4 bg-light p-3 rounded" style="border: 1px dashed #ccc;">
                                         <label class="form-label font-weight-bold d-block mb-3">Обновить фотографию</label>
                                         <div class="d-flex align-items-center gap-4">
@@ -65,6 +68,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- Логин -->
                                     <div class="mb-3">
                                         <label class="form-label font-weight-bold">Имя пользователя (Логин)</label>
                                         {{ form.username }}
@@ -73,17 +77,43 @@
                                         {% endif %}
                                     </div>
 
+                                    <!-- Личные данные (в две колонки, как в checkout) -->
                                     <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Фамилия</label>
+                                            {{ form.last_name }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Имя</label>
+                                            {{ form.first_name }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Отчество (при наличии)</label>
+                                            {{ form.middle_name }}
+                                        </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label font-weight-bold">Телефон</label>
                                             {{ form.phone }}
                                         </div>
                                         <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Область</label>
+                                            {{ form.region }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label font-weight-bold">Город</label>
                                             {{ form.city }}
                                         </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Почтовый индекс</label>
+                                            {{ form.postal_code }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Адрес (улица, дом, квартира)</label>
+                                            {{ form.address }}
+                                        </div>
                                     </div>
 
+                                    <!-- О себе -->
                                     <div class="mb-4">
                                         <label class="form-label font-weight-bold">О себе</label>
                                         {{ form.bio }}

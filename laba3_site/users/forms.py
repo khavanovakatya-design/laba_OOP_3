@@ -47,11 +47,21 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['avatar', 'phone', 'city', 'bio']
+        # Добавляем новые поля в список
+        fields = [
+            'avatar', 'last_name', 'first_name', 'middle_name', 
+            'phone', 'region', 'city', 'postal_code', 'address', 'bio'
+        ]
         widgets = {
             'avatar': forms.FileInput(attrs={'class': 'form-control', 'style': 'padding: 10px;'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Иванов'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Иван'}),
+            'middle_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Иванович'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+7 (999) 000-00-00'}),
+            'region': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Московская область'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Москва'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '123456'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Улица, дом, квартира'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Расскажите о себе...'}),
         }
 
