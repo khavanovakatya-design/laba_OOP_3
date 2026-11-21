@@ -4,18 +4,130 @@
 {% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
-<div class="container mt-100 mb-100">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="login-form text-center">
-                <h2>Личный кабинет</h2>
-                <hr>
-                <p><strong>Логин:</strong> {{ request.user.username }}</p>
-                <p><strong>Email:</strong> {{ request.user.email }}</p>
-                <p><strong>Дата регистрации:</strong> {{ request.user.date_joined }}</p>
-                <a href="{% url 'logout' %}" class="btn-primary mt-4">ВЫЙТИ</a>
+<div class="login-page mt-100 mb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow-sm border-0" style="border-radius: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                    <div class="card-body text-center pt-5 pb-4">
+                        <div class="position-relative d-inline-block mb-3">
+                            {% if profile.avatar %}
+                                <img src="{{ profile.avatar.url }}" alt="Аватар" class="rounded-circle shadow" style="width: 140px; height: 140px; object-fit: cover; border: 4px solid #fff;">
+                            {% else %}
+                                <img src="{% static 'img/default-avatar.png' %}" alt="Аватар по умолчанию" class="rounded-circle shadow" style="width: 140px; height: 140px; object-fit: cover; background: #eee; border: 4px solid #fff;">
+                            {% endif %}
+                            <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" style="width: 25px; height: 25px;" title="Онлайн"></span>
+                        </div>
+                        
+                        <h3 class="font-weight-bold mb-1">{{ user.username }}</h3>
+                        <p class="text-muted mb-4"><i class="fas fa-envelope"></i> {{ user.email }}</p>
+
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger w-100" style="border-radius: 10px;"><i class="fas fa-sign-out-alt"></i> Выйти из аккаунта</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-white border-0 pt-4 pb-0">
+                        <ul class="nav nav-tabs border-bottom-0" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active fw-bold text-dark fs-5 px-4" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="true">Настройки профиля</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-bold text-muted fs-5 px-4" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab" aria-controls="security" aria-selected="false">Безопасность</button>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="tab-content" id="profileTabsContent">
+                            <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    
+                                    <div class="mb-4 bg-light p-3 rounded" style="border: 1px dashed #ccc;">
+                                        <label class="form-label font-weight-bold d-block mb-3">Обновить фотографию</label>
+                                        <div class="d-flex align-items-center gap-4">
+                                            {{ form.avatar }}
+                                            {% if form.avatar.errors %}
+                                                <div class="text-danger small mt-1">{{ form.avatar.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label font-weight-bold">Имя пользователя (Логин)</label>
+                                        {{ form.username }}
+                                        {% if form.username.errors %}
+                                            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Телефон</label>
+                                            {{ form.phone }}
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label font-weight-bold">Город</label>
+                                            {{ form.city }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label font-weight-bold">О себе</label>
+                                        {{ form.bio }}
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold text-white" style="border-radius: 10px; background-color: #001f3f; border-color: #001f3f; transition: 0.3s;" onmouseover="this.style.backgroundColor='#003366'" onmouseout="this.style.backgroundColor='#001f3f'">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                                <div class="text-center py-5">
+                                    <i class="fas fa-shield-alt text-muted mb-3" style="font-size: 50px;"></i>
+                                    <h5 class="fw-bold">Безопасность аккаунта</h5>
+                                    <p class="text-muted mb-4">Регулярно меняйте пароль, чтобы защитить свои данные.</p>
+                                    <a href="{% url 'password_reset_request' %}" class="btn btn-outline-dark px-4 py-2" style="border-radius: 10px;">Сменить пароль</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .nav-tabs .nav-link {
+        border: none;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+    }
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #1a1a1a;
+        color: #1a1a1a !important;
+        background: transparent;
+    }
+    .form-control {
+        border-radius: 8px;
+        padding: 10px 15px;
+    }
+    .form-control:focus {
+        border-color: #1a1a1a;
+        box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.1);
+    }
+</style>
 {% endblock %}

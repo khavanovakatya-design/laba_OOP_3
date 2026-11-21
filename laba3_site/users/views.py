@@ -7,9 +7,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, PasswordResetRequestForm, PasswordResetConfirmForm, UserProfileForm
 from main.models import Product
-from .models import Cart, CartItem, EmailVerification
+from .models import Cart, CartItem, EmailVerification, PasswordResetCode, Profile
 
 def register_view(request):
     if request.method == 'POST':
@@ -84,8 +84,20 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+@login_required
 def profile_view(request):
-    return render(request, 'users/profile.html')
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Профиль успешно обновлен!')
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=profile)
+    
+    return render(request, 'users/profile.html', {'form': form, 'profile': profile})
 
 @login_required
 def add_to_cart(request, product_id):
@@ -140,9 +152,6 @@ def update_cart(request, item_id):
     else:
         item.delete()
     return redirect('cart')
-
-from .forms import PasswordResetRequestForm, PasswordResetConfirmForm
-from .models import PasswordResetCode
 
 def password_reset_request_view(request):
     if request.method == 'POST':
