@@ -153,3 +153,9 @@ def search_suggestions(request):
                 'url': f'/product/{product.id}/'
             })
     return JsonResponse({'results': results})
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def offer(request):
+    return render(request, 'offer.html')
