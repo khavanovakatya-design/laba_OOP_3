@@ -121,3 +121,11 @@ def register_view(request):
         return redirect('login') 
 
     return render(request, 'users/register.html')
+
+from django.shortcuts import render
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def offer(request):
+    return render(request, 'offer.html')
