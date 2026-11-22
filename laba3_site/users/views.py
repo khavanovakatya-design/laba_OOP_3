@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, PasswordResetRequestForm, PasswordResetConfirmForm, UserProfileForm
 from main.models import Product
-from .models import Cart, CartItem, EmailVerification, PasswordResetCode, Profile, Order, OrderItem
+from .models import Cart, CartItem, EmailVerification, PasswordResetCode, Profile, Order, OrderItem, WishlistItem
+from django.views.decorators.http import require_POST
 
 def register_view(request):
     if request.method == 'POST':
@@ -261,3 +262,44 @@ def password_reset_confirm_view(request):
         form = PasswordResetConfirmForm()
     
     return render(request, 'users/password_reset_confirm.html', {'form': form})
+
+@login_required
+def wishlist(request):
+    items = WishlistItem.objects.filter(user=request.user).select_related('product')
+    print("USER:", request.user, "| ITEMS:", list(items.values_list('id', 'product__title')))
+    return render(request, 'wishlist.html', {'wishlist_items': items})
+
+
+@login_required
+def wishlist_toggle(request, product_id):
+    """AJAX-переключатель: добавить/удалить товар из вишлиста."""
+    product = get_object_or_404(Product, id=product_id)
+    item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        item.delete()
+        in_wishlist = False
+    else:
+        in_wishlist = True
+
+    count = WishlistItem.objects.filter(user=request.user).count()
+
+    # Если это не AJAX — редиректим обратно
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return redirect(request.META.get('HTTP_REFERER', 'wishlist'))
+
+    return JsonResponse({
+        'in_wishlist': in_wishlist,
+        'count': count,
+        'product_id': product.id,
+    })
+
+
+@login_required
+def wishlist_remove(request, item_id):
+    item = get_object_or_404(WishlistItem, id=item_id, user=request.user)
+    item.delete()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+
+    return redirect('wishlist')

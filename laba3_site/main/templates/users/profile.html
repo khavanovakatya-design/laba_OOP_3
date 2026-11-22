@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Личный кабинет{% endblock %}
 
@@ -144,7 +145,7 @@
                                                 <tr>
                                                     <td class="fw-bold">#{{ forloop.counter }}</td>
                                                     <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                                                    <td>{{ order.total_price }} ₽</td>
+                                                    <td>{{ order.total_price|floatformat:0|intcomma }} ₽</td>
                                                     <td>
                                                         <span class="badge bg-success">Оплачен</span>
                                                     </td>

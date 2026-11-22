@@ -11,5 +11,6 @@ urlpatterns = [
     path('contact', views.contact),
     path('faq', views.faq),
     path('product/<int:product_id>/', views.product, name='product_detail'),
-    path('wishlist', views.wishlist)
+    path('wishlist', views.wishlist),
+    path('api/search/', views.search_suggestions, name='search_suggestions'),
 ]

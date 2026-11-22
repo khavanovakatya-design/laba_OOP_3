@@ -1,11 +1,13 @@
 from django.shortcuts import *
 from django.core.paginator import Paginator
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Q
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
 from .models import Product
+from users.models import WishlistItem
 from .filters import ProductFilter
+from django.http import JsonResponse
 
 def index(request):
     return render(request, 'index.html')
@@ -41,6 +43,19 @@ def collection(request):
     elif sort_by == 'name_desc':
         products = products.order_by('-title')
 
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(
+            Q(title__icontains=query) | 
+            Q(article__icontains=query)
+        )
+
+    user_wishlist_ids = []
+    if request.user.is_authenticated:
+        user_wishlist_ids = list(
+            WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        )
+
     price_stats = products.aggregate(min_price=Min('price'), max_price=Max('price'))
     absolute_min = int(price_stats['min_price'] or 0)
     absolute_max = int(price_stats['max_price'] or 10000)
@@ -64,6 +79,8 @@ def collection(request):
         'current_min': int(current_min) if current_min else absolute_min,
         'current_max': int(current_max) if current_max else absolute_max,
         'current_sort': sort_by,
+        'search_query': query,
+        'user_wishlist_ids': user_wishlist_ids,
     }
 
     return render(request, 'collection-left-sidebar.html', context)
@@ -121,3 +138,18 @@ def register_view(request):
         return redirect('login') 
 
     return render(request, 'users/register.html')
+
+def search_suggestions(request):
+    query = request.GET.get('q', '')
+    results = []
+    if query:
+        products = Product.objects.filter(title__icontains=query)[:5]
+        for product in products:
+            results.append({
+                'id': product.id,
+                'title': product.title,
+                'price': str(product.price),
+                'image': product.image.url if product.image else '',
+                'url': f'/product/{product.id}/'
+            })
+    return JsonResponse({'results': results})

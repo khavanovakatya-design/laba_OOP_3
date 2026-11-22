@@ -16,4 +16,7 @@ urlpatterns = [
     path('my-orders/', views.order_history, name='order_history'),
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
+    path('wishlist', views.wishlist, name='wishlist'),
+    path('wishlist/toggle/<int:product_id>/', views.wishlist_toggle, name='wishlist_toggle'),
+    path('wishlist/remove/<int:item_id>/', views.wishlist_remove, name='wishlist_remove'),
 ]

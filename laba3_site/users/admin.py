@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart, CartItem, Order, OrderItem, Profile
+from .models import Cart, CartItem, Order, OrderItem, Profile, WishlistItem
 
 # Регистрируем корзину
 @admin.register(Cart)
@@ -25,3 +25,7 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'product', 'quantity', 'price', 'total_price')
     search_fields = ('order__id', 'product__title')
+
+@admin.register(WishlistItem)
+class WishlistItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'product', 'created_at')
