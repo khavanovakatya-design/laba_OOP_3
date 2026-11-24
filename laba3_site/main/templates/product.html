@@ -108,12 +108,12 @@
                             </div>
                         </form>
                         <div class="buy-it-now-btn mt-2">
-                            <form action="{% url 'add_to_cart' product.id %}" method="post">
+                            <form action="{% url 'buy_now' product.id %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
+                                <input type="hidden" name="quantity" id="buy-now-qty-input" value="1">
                                 <button type="submit" class="position-relative btn-atc btn-buyit-now">КУПИТЬ СЕЙЧАС</button>
                             </form>
-                        </div>                       
+                        </div>                      
                     </div>
                 </div>
             </div>

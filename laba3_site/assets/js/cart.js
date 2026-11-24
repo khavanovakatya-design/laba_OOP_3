@@ -68,6 +68,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // Функция синхронизации
         function syncQuantity() {
             hiddenQtyInput.value = mainQtyInput.value;
+            const buyNowQty = document.getElementById('buy-now-qty-input');
+            if (buyNowQty) {
+                buyNowQty.value = mainQtyInput.value;
+            }
         }
 
         // Кнопка МИНУС

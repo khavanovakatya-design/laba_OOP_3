@@ -128,42 +128,74 @@
                         <div class="cart-total-area checkout-summary-area mt-5">
                             <h3 class="d-none d-lg-block mb-0 text-center heading_24 mb-4">Сводка заказа</h3>
 
-                            <!-- Цикл по товарам в корзине -->
-                            {% for item in cart.items.all %}
-                            <div class="minicart-item d-flex">
-                                <div class="mini-img-wrapper">
-                                    <img class="mini-img" src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                            {% if buy_now_mode %}
+                                <!-- Режим «Купить сейчас»: только один товар -->
+                                <div class="minicart-item d-flex">
+                                    <div class="mini-img-wrapper">
+                                        <img class="mini-img" src="{{ buy_now_product.image.url }}" alt="{{ buy_now_product.title }}">
+                                    </div>
+                                    <div class="product-info">
+                                        <h2 class="product-title">
+                                            <a href="{% url 'product_detail' buy_now_product.id %}">{{ buy_now_product.title }}</a>
+                                        </h2>
+                                        <p class="product-vendor">
+                                            {{ buy_now_product.price|floatformat:0|intcomma }} ₽ x {{ buy_now_quantity }}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="product-info">
-                                    <h2 class="product-title"><a href="{% url 'product_detail' item.product.id %}">{{ item.product.title }}</a></h2>
-                                    <!-- Выводим цену и количество -->
-                                    <p class="product-vendor">{{ item.product.price|floatformat:0|intcomma }} ₽ x {{ item.quantity }}</p>
+                            {% else %}
+                                <!-- Обычный режим: товары из корзины -->
+                                {% for item in cart.items.all %}
+                                <div class="minicart-item d-flex">
+                                    <div class="mini-img-wrapper">
+                                        <img class="mini-img" src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                                    </div>
+                                    <div class="product-info">
+                                        <h2 class="product-title">
+                                            <a href="{% url 'product_detail' item.product.id %}">{{ item.product.title }}</a>
+                                        </h2>
+                                        <p class="product-vendor">
+                                            {{ item.product.price|floatformat:0|intcomma }} ₽ x {{ item.quantity }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            {% empty %}
-                            <div class="text-center py-3">
-                                <p>Ваша корзина пуста.</p>
-                            </div>
-                            {% endfor %}
+                                {% empty %}
+                                <div class="text-center py-3">
+                                    <p>Ваша корзина пуста.</p>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
 
                             <div class="cart-total-box mt-4 bg-transparent p-0">
-                                <div class="subtotal-item subtotal-box">
-                                    <h4 class="subtotal-title">Товаров ({{ cart.total_items }}):</h4>
-                                    <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
-                                </div>
-                                
-                                <!-- Блок доставки (можно оставить статичным или рассчитать в views.py) -->
-                                <div class="subtotal-item shipping-box">
-                                    <h4 class="subtotal-title">Доставка:</h4>
-                                    <p class="subtotal-value">0 ₽</p>
-                                </div>
-                                
-                                <hr />
-                                
-                                <div class="subtotal-item discount-box">
-                                    <h4 class="subtotal-title">К оплате:</h4>
-                                    <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
-                                </div>
+                                {% if buy_now_mode %}
+                                    <div class="subtotal-item subtotal-box">
+                                        <h4 class="subtotal-title">Товаров ({{ buy_now_quantity }}):</h4>
+                                        <p class="subtotal-value">{{ buy_now_total_price|floatformat:0|intcomma }} ₽</p>
+                                    </div>
+                                    <div class="subtotal-item shipping-box">
+                                        <h4 class="subtotal-title">Доставка:</h4>
+                                        <p class="subtotal-value">0 ₽</p>
+                                    </div>
+                                    <hr />
+                                    <div class="subtotal-item discount-box">
+                                        <h4 class="subtotal-title">К оплате:</h4>
+                                        <p class="subtotal-value">{{ buy_now_total_price|floatformat:0|intcomma }} ₽</p>
+                                    </div>
+                                {% else %}
+                                    <div class="subtotal-item subtotal-box">
+                                        <h4 class="subtotal-title">Товаров ({{ cart.total_items }}):</h4>
+                                        <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
+                                    </div>
+                                    <div class="subtotal-item shipping-box">
+                                        <h4 class="subtotal-title">Доставка:</h4>
+                                        <p class="subtotal-value">0 ₽</p>
+                                    </div>
+                                    <hr />
+                                    <div class="subtotal-item discount-box">
+                                        <h4 class="subtotal-title">К оплате:</h4>
+                                        <p class="subtotal-value">{{ cart.total_price|floatformat:0|intcomma }} ₽</p>
+                                    </div>
+                                {% endif %}
 
                                 <div class="mt-4 checkout-promo-code">
                                     <input class="input-promo-code" type="text" placeholder="Промокод" />

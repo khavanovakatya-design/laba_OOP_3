@@ -102,6 +102,23 @@ def profile_view(request):
     return render(request, 'users/profile.html', {'form': form, 'profile': profile, 'orders': orders})
 
 @login_required
+def buy_now(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, id=product_id)
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity < 1:
+            quantity = 1
+
+        # Сохраняем «прямой» заказ в сессии, корзину не трогаем
+        request.session['buy_now'] = {
+            'product_id': product.id,
+            'quantity': quantity,
+        }
+        return redirect('checkout')
+
+    return redirect('product_detail', product_id=product_id)
+
+@login_required
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, id=product_id)
@@ -131,10 +148,11 @@ def add_to_cart(request, product_id):
 
 @login_required
 def cart_view(request):
+    # Если пользователь открыл корзину — режим «Купить сейчас» больше не нужен
+    request.session.pop('buy_now', None)
+
     cart, created = Cart.objects.get_or_create(user=request.user)
-    context = {
-        'cart': cart,
-    }
+    context = {'cart': cart}
     return render(request, 'cart.html', context)
 
 @login_required
@@ -157,20 +175,74 @@ def update_cart(request, item_id):
 
 @login_required
 def checkout(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
     profile, created = Profile.objects.get_or_create(user=request.user)
-    
-    context = {
-        'cart': cart,
-        'profile': profile
-    }
+
+    buy_now = request.session.get('buy_now')
+
+    if buy_now:
+        # Режим «Купить сейчас» — только один товар, корзина не участвует
+        product = get_object_or_404(Product, id=buy_now['product_id'])
+        quantity = buy_now['quantity']
+        total_price = product.price * quantity
+
+        context = {
+            'profile': profile,
+            'buy_now_mode': True,
+            'buy_now_product': product,
+            'buy_now_quantity': quantity,
+            'buy_now_total_price': total_price,
+            # Для шаблона: пустая «корзина», чтобы цикл не падал
+            'cart': None,
+        }
+    else:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        context = {
+            'profile': profile,
+            'buy_now_mode': False,
+            'cart': cart,
+        }
+
     return render(request, 'checkout.html', context)
 
 @login_required
 def checkout_success(request):
     if request.method == 'POST':
+        buy_now = request.session.get('buy_now')
+
+        if buy_now:
+            # Режим «Купить сейчас»
+            product = get_object_or_404(Product, id=buy_now['product_id'])
+            quantity = buy_now['quantity']
+            total_price = product.price * quantity
+
+            order = Order.objects.create(
+                user=request.user,
+                first_name=request.POST.get('first_name', ''),
+                last_name=request.POST.get('last_name', ''),
+                phone=request.POST.get('phone', ''),
+                email=request.POST.get('email', ''),
+                region=request.POST.get('region', ''),
+                address=request.POST.get('address', ''),
+                city=request.POST.get('city', ''),
+                postal_code=request.POST.get('postal_code', ''),
+                total_price=total_price,
+            )
+
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                price=product.price,
+                quantity=quantity,
+            )
+
+            # Очищаем «buy now», корзину не трогаем
+            del request.session['buy_now']
+
+            return render(request, 'checkout-end.html', {'order': order})
+
+        # Обычный режим — из корзины
         cart = Cart.objects.filter(user=request.user).first()
-        
+
         if cart and cart.items.exists():
             order = Order.objects.create(
                 user=request.user,
@@ -192,11 +264,11 @@ def checkout_success(request):
                     price=item.product.price,
                     quantity=item.quantity
                 )
-            
+
             cart.items.all().delete()
 
             return render(request, 'checkout-end.html', {'order': order})
-            
+
     return redirect('cart')
 
 @login_required
