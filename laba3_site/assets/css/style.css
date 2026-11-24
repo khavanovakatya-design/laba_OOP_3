@@ -1,29 +1,5 @@
 @charset "UTF-8";
-/*
-Theme Name: Bisum - Multipurpose eCommerce Template
-Theme URI: https://spreethemesprevious.github.io/bisum/
-Author: Spree Themes
-Author URI: https://themeforest.net/user/spreethemes/portfolio
-Description: Bisum – eCommerce HTML template is a clean, modern and well organized template. It's suitable for all store and this template can be easily customized.
-Version: 1.0.1
-*/
-/*============================================================================
-  Prefix mixin for generating vendor prefixes:
-  Usage:
-    // Input:
-    .element {
-      @include prefix(transform, scale(1), ms webkit spec);
-    }
 
-    // Output:
-    .element {
-      -ms-transform: scale(1);
-      -webkit-transform: scale(1);
-      transform: scale(1);
-    }
-
-  Based on https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_prefixer.scss
-==============================================================================*/
 iframe {
   width: 100%; }
 
@@ -40,33 +16,6 @@ iframe {
   .container-fluid {
     padding-left: var(--bs-gutter-x, 0.75rem);
     padding-right: var(--bs-gutter-x, 0.75rem); } }
-
-.bg-1 {
-  background-color: #00234D; }
-
-.bg-2 {
-  background-color: #000; }
-
-.bg-3 {
-  background-color: #F76B6A; }
-
-.bg-4 {
-  background-color: #071C1F; }
-
-.bg-5 {
-  background-color: #FBF3F0; }
-
-.bg-pink {
-  background-color: #FFF3F3; }
-
-.bg-trust-1 {
-  background-color: #FCEDDA; }
-
-.bg-trust-2 {
-  background-color: #F2FBCB; }
-
-.bg-trust-3 {
-  background-color: #F7D8F9; }
 
 .btn-primary,
 .btn-primary:hover,
@@ -545,9 +494,12 @@ button,
   position: fixed;
   bottom: 30px;
   right: 30px;
-  -webkit-transition: background-color .3s,  opacity .5s, visibility .5s;
-  -o-transition: background-color .3s,  opacity .5s, visibility .5s;
-  transition: background-color .3s,  opacity .5s, visibility .5s;
+  -webkit-transition: background-color .3s, 
+ opacity .5s, visibility .5s;
+  -o-transition: background-color .3s, 
+ opacity .5s, visibility .5s;
+  transition: background-color .3s, 
+ opacity .5s, visibility .5s;
   opacity: 0;
   visibility: hidden;
   z-index: 1000;
