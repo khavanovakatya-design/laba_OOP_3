@@ -272,7 +272,6 @@ def wishlist(request):
 
 @login_required
 def wishlist_toggle(request, product_id):
-    """AJAX-переключатель: добавить/удалить товар из вишлиста."""
     product = get_object_or_404(Product, id=product_id)
     item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
     if not created:
@@ -283,7 +282,6 @@ def wishlist_toggle(request, product_id):
 
     count = WishlistItem.objects.filter(user=request.user).count()
 
-    # Если это не AJAX — редиректим обратно
     if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return redirect(request.META.get('HTTP_REFERER', 'wishlist'))
 

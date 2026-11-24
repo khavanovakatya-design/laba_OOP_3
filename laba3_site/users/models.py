@@ -5,7 +5,6 @@ from main.models import Product
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
-    # Новые поля из checkout
     last_name = models.CharField('Фамилия', max_length=50, blank=True)
     first_name = models.CharField('Имя', max_length=50, blank=True)
     middle_name = models.CharField('Отчество', max_length=50, blank=True)
@@ -13,7 +12,6 @@ class Profile(models.Model):
     postal_code = models.CharField('Почтовый индекс', max_length=20, blank=True)
     address = models.CharField('Адрес', max_length=255, blank=True)
     
-    # Старые поля
     phone = models.CharField('Телефон', max_length=20, blank=True)
     city = models.CharField('Город', max_length=100, blank=True)
     bio = models.TextField('О себе', max_length=500, blank=True)
@@ -109,7 +107,7 @@ class WishlistItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'product')  # один товар — одна запись у пользователя
+        unique_together = ('user', 'product')
         ordering = ['-created_at']
 
     def __str__(self):
