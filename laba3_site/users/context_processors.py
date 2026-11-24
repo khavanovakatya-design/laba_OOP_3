@@ -1,12 +1,13 @@
 from .models import Cart, WishlistItem
 
-def cart_processor(request):
+def global_counts(request):
     if request.user.is_authenticated:
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        return {'global_cart': cart}
-    return {'global_cart': None}
-
-def wishlist_count(request):
-    if request.user.is_authenticated:
-        return {'wishlist_count': WishlistItem.objects.filter(user=request.user).count()}
-    return {'wishlist_count': 0}
+        cart = Cart.objects.filter(user=request.user).first()
+        return {
+            'global_cart': cart,
+            'global_wishlist_count': WishlistItem.objects.filter(user=request.user).count(),
+        }
+    return {
+        'global_cart': None,
+        'global_wishlist_count': 0,
+    }

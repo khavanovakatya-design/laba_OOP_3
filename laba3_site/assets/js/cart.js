@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
     addToCartForms.forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault(); // Отменяем перезагрузку страницы
+            e.stopImmediatePropagation()
 
             // Принудительно синхронизируем видимое поле количества со скрытым перед отправкой
             const mainQty = document.getElementById('main-qty-input');
@@ -135,4 +136,89 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 3000);
     }
 
+    // ==========================================
+    // 4. ЛОГИКА WISHLIST (AJAX toggle + remove)
+    // ==========================================
+    const wishlistToggles = document.querySelectorAll('.js-wishlist-toggle');
+
+    wishlistToggles.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const url = this.dataset.url;
+            const svg = this.querySelector('svg');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.in_wishlist) {
+                    this.classList.add('active');
+                    svg.setAttribute('fill', '#F76B6A');
+                    svg.setAttribute('stroke', '#F76B6A');
+                    showNotification('Товар добавлен в избранное ❤');
+                } else {
+                    this.classList.remove('active');
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'black');
+                    showNotification('Товар удалён из избранного');
+                }
+
+                document.querySelectorAll('.wishlist-badge').forEach(badge => {
+                    badge.textContent = data.count;
+                });
+            })
+            .catch(error => {
+                console.error('Wishlist error:', error);
+                showNotification('Ошибка при работе с избранным', true);
+            });
+        });
+    });
+
+    // Удаление из вишлиста на странице wishlist.html
+    const wishlistRemoveBtns = document.querySelectorAll('.js-wishlist-remove');
+
+    wishlistRemoveBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const itemId = this.dataset.itemId;
+            const removeUrl = `/wishlist/remove/${itemId}/`;
+
+            fetch(removeUrl, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const card = document.getElementById(`wishlist-item-${itemId}`);
+                    if (card) {
+                        card.style.transition = 'opacity 0.3s ease';
+                        card.style.opacity = '0';
+                        setTimeout(() => card.remove(), 300);
+                    }
+                    showNotification('Товар удалён из избранного');
+
+                    const header = document.querySelector('.section-heading');
+                    if (header && data.count !== undefined) {
+                        header.textContent = `My Wishlist (${data.count})`;
+                    }
+                    // обновить бейдж в шапке
+                    document.querySelectorAll('.wishlist-badge').forEach(b => b.textContent = data.count);
+                }
+            })
+            .catch(error => {
+                console.error('Wishlist remove error:', error);
+            });
+        });
+    });
 });

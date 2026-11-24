@@ -300,4 +300,5 @@ def wishlist_remove(request, item_id):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'success': True})
 
-    return redirect('wishlist')
+    count = WishlistItem.objects.filter(user=request.user).count()
+    return JsonResponse({'success': True, 'count': count})

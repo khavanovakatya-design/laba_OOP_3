@@ -94,10 +94,19 @@ def faq(request):
 def product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     related_products = Product.objects.exclude(id=product.id).order_by('?')[:8]
-    return render(request, 'product.html', {'product': product, 'related_products': related_products})
 
-def wishlist(request):
-    return render(request, 'wishlist.html')
+    # в view, который рендерит product.html
+    wishlist_product_ids = []
+    if request.user.is_authenticated:
+        wishlist_product_ids = list(
+            WishlistItem.objects.filter(user=request.user).values_list('product_id', flat=True)
+        )
+    context = {
+        'wishlist_product_ids': wishlist_product_ids,
+        'product': product,
+        'related_products': related_products
+    }
+    return render(request, 'product.html', context)
 
 def register_view(request):
     if request.method == 'POST':
