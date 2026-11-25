@@ -9,109 +9,91 @@
                 <div class="col-lg-6 col-md-12 col-12">
                     <div class="product-single-image">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; max-width: 1000px; height: auto;">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; max-width: 1000px; height: auto; border-radius: 15px;">
                         {% else %}
-                            <img src="{% static 'img/products/furniture/1.jpg' %}" alt="{{ product.name }}" style="width: 100%; max-width: 1000px; height: auto;">
+                            <img src="{% static 'img/products/furniture/1.jpg' %}" alt="{{ product.name }}" style="width: 100%; max-width: 1000px; height: auto; border-radius: 15px;">
                         {% endif %}
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-12">
                     <div class="product-details ps-lg-4">
-                        <div class="mb-3"><span class="product-availability">В наличии</span></div>
-                        <h2 class="product-title mb-3">{{ product.title }}</h2>
+                        <div class="mb-3"><span class="product-availability text-success fw-bold">В наличии</span></div>
+                        <h2 class="product-title mb-3" style="font-family: 'Playfair Display', serif;">{{ product.title }}</h2>
+                        
                         <div class="product-rating d-flex align-items-center mb-3">
                             <span class="star-rating">
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                </svg>
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                </svg>
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                </svg>
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                </svg>
-                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                </svg>                                            
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#c5a059"/></svg>
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#c5a059"/></svg>
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#c5a059"/></svg>
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#c5a059"/></svg>
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/></svg>
                             </span>
-                            <span class="rating-count ms-2">(0)</span>
+                            <span class="rating-count ms-2 text-muted">(0)</span>
                         </div>
+
                         <div class="product-price-wrapper mb-4">
-                            <span class="product-price regular-price">{{ product.price|floatformat:0|intcomma }} ₽</span>
+                            <span class="product-price regular-price fs-3 fw-bold" style="color: #001f3f;">{{ product.price|floatformat:0|intcomma }} ₽</span>
                         </div>
+                        
                         <div class="product-sku product-meta mb-1">
-                            <strong class="label">арт:</strong> {{ product.article }}
+                            <strong class="label">Артикул:</strong> {{ product.article }}
                         </div>
                         <div class="product-vendor product-meta mb-3">
                             <strong class="label">Бренд:</strong> {{ product.vendor }}
                         </div>
 
-                        <div class="product-variant-wrapper">
+                        <div class="product-variant-wrapper mb-4">
                             <div class="product-variant product-variant-other">
-                                <strong class="label mb-1 d-block">Размер:</strong>
-
-                                <ul class="variant-list list-unstyled d-flex align-items-center flex-wrap">
+                                <strong class="label mb-2 d-block">Размер:</strong>
+                                <ul class="variant-list list-unstyled d-flex align-items-center flex-wrap gap-2">
                                     <li class="variant-item">
-                                        <input type="radio" value="size">
-                                        <label class="variant-label">{{ product.size }}</label>
+                                        <input type="radio" value="size" checked style="display:none;">
+                                        <label class="variant-label px-3 py-2 border rounded" style="border-color: #001f3f !important; font-weight: bold;">{{ product.size }}</label>
                                     </li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="misc d-flex align-items-end justify-content-between mt-4">
-                            <div class="quantity d-flex align-items-center justify-content-between">
-                                <button type="button" class="qty-btn dec-qty" id="btn-decrease">
-                                    <img src="{% static 'img/icon/minus.svg' %}" alt="minus">
+                            <div class="quantity d-flex align-items-center justify-content-between border rounded p-1" style="width: 140px;">
+                                <button type="button" class="qty-btn dec-qty border-0 bg-transparent" id="btn-decrease">
+                                    <i class="fas fa-minus"></i>
                                 </button>
-                                
-                                <input class="qty-input" type="number" id="main-qty-input" name="qty" value="1" min="1"> 
-                                
-                                <button type="button" class="qty-btn inc-qty" id="btn-increase">
-                                    <img src="{% static 'img/icon/plus.svg' %}" alt="plus">
+                                <input class="qty-input border-0 text-center bg-transparent fw-bold" type="number" id="main-qty-input" name="qty" value="1" min="1" style="width: 50px; outline: none;"> 
+                                <button type="button" class="qty-btn inc-qty border-0 bg-transparent" id="btn-increase">
+                                    <i class="fas fa-plus"></i>
                                 </button>
                             </div>
-                            <div class="message-popup d-flex align-items-center">
-                                <span class="message-popup-icon">
-                                    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.5 4.25V16.25H4.5V20.0703L5.71875 19.0859L9.25781 16.25H16.5V4.25H1.5ZM3 5.75H15V14.75H8.74219L8.53125 14.9141L6 16.9297V14.75H3V5.75ZM18 7.25V8.75H21V17.75H18V19.9297L15.2578 17.75H9.63281L7.75781 19.25H14.7422L19.5 23.0703V19.25H22.5V7.25H18Z" fill="black"/>
-                                </svg>
-                                </span>
-                                <span class="message-popup-text ms-2">Поддержка</span>
+                            <div class="message-popup d-flex align-items-center text-muted">
+                                <i class="fas fa-headset fs-5 me-2"></i>
+                                <span class="message-popup-text">Поддержка</span>
                             </div>
                         </div>
 
                         <form class="product-form ajax-add-to-cart" action="{% url 'add_to_cart' product.id %}" method="post">
                             {% csrf_token %}
-                            <div class="product-form-buttons d-flex align-items-center justify-content-between mt-4">
-                                <!-- Важно: name="quantity" чтобы Django знал, сколько товаров добавить -->
+                            <div class="product-form-buttons d-flex align-items-center justify-content-between mt-4 gap-3">
                                 <input type="hidden" name="quantity" id="product-qty-input" value="1">
                                 
-                                <button type="submit" class="position-relative btn-atc btn-add-to-cart loader">В КОРЗИНУ</button>
+                                <button type="submit" class="btn-atc btn-add-to-cart w-100 fw-bold text-white text-uppercase" style="background-color: #001f3f; border: 2px solid #001f3f; padding: 15px; border-radius: 8px; transition: 0.3s;" onmouseover="this.style.backgroundColor='#c5a059'; this.style.borderColor='#c5a059'; this.style.color='#001f3f';" onmouseout="this.style.backgroundColor='#001f3f'; this.style.borderColor='#001f3f'; this.style.color='#ffffff';">
+                                    В КОРЗИНУ
+                                </button>
                                 
-                                <button type="button"
-                                    class="product-wishlist js-wishlist-toggle {% if product.id in wishlist_product_ids %}active{% endif %}"
-                                    data-product-id="{{ product.id }}"
-                                    data-url="{% url 'wishlist_toggle' product.id %}"
-                                    title="Добавить в избранное">
-                                <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="{% if product.id in wishlist_product_ids %}#F76B6A{% else %}none{% endif %}"
-                                    stroke="{% if product.id in wishlist_product_ids %}#F76B6A{% else %}black{% endif %}"
-                                    stroke-width="1.5">
-                                    <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105Z"/>
-                                </svg>
-                            </button>
+                                <button type="button" class="product-wishlist js-wishlist-toggle border rounded d-flex align-items-center justify-content-center" data-product-id="{{ product.id }}" data-url="{% url 'wishlist_toggle' product.id %}" title="Добавить в избранное" style="width: 55px; height: 55px; flex-shrink: 0;">
+                                    <svg class="icon icon-wishlist" width="24" height="24" viewBox="0 0 26 22" xmlns="http://www.w3.org/2000/svg" fill="{% if product.id in wishlist_product_ids %}#F76B6A{% else %}none{% endif %}" stroke="{% if product.id in wishlist_product_ids %}#F76B6A{% else %}#001f3f{% endif %}" stroke-width="1.5">
+                                        <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105Z"/>
+                                    </svg>
+                                </button>
                             </div>
                         </form>
-                        <div class="buy-it-now-btn mt-2">
+
+                        <div class="buy-it-now-btn mt-3">
                             <form action="{% url 'buy_now' product.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" id="buy-now-qty-input" value="1">
-                                <button type="submit" class="position-relative btn-atc btn-buyit-now">КУПИТЬ СЕЙЧАС</button>
+                                <button type="submit" class="btn-atc btn-buyit-now w-100 fw-bold text-uppercase" style="background-color: #c5a059; border: 2px solid #c5a059; color: #001f3f; padding: 15px; border-radius: 8px; transition: 0.3s;" onmouseover="this.style.backgroundColor='#001f3f'; this.style.borderColor='#001f3f'; this.style.color='#ffffff';" onmouseout="this.style.backgroundColor='#c5a059'; this.style.borderColor='#c5a059'; this.style.color='#001f3f';">
+                                    КУПИТЬ СЕЙЧАС
+                                </button>
                             </form>
                         </div>                      
                     </div>
@@ -120,7 +102,6 @@
         </div>
     </div>
 
-    <!-- product tab start -->
     <div class="product-tab-section mt-100" data-aos="fade-up" data-aos-duration="700">
         <div class="container">
             <div class="tab-list product-tab-list">
@@ -158,13 +139,11 @@
             </div>
         </div>
     </div>
-    <!-- product tab end -->
     
-    <!-- you may also like start -->
     <div class="featured-collection-section mt-100 home-section overflow-hidden">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-heading">Вам может понравиться</h2>
+                <h2 class="section-heading" style="font-family: 'Playfair Display', serif; color: #001f3f;">Вам может понравиться</h2>
             </div>
 
             <div class="product-container position-relative">
@@ -193,7 +172,6 @@
                 <div class="new-item" data-aos="fade-up" data-aos-duration="300">
                     <div class="product-card">
                         <div class="product-card-img">
-                            <!-- Ссылка на страницу конкретного товара (если у вас есть URL с ID) -->
                             <a class="hover-switch" href="/product/{{ rel_product.id }}">
                                 {% if rel_product.image %}
                                     <img class="primary-img" src="{{ rel_product.image.url }}" alt="{{ rel_product.title }}">
@@ -206,31 +184,22 @@
                                     <form action="{% url 'add_to_cart' rel_product.id %}" method="post" class="w-100 ajax-add-to-cart">
                                         {% csrf_token %}
                                         <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="addtocart-btn btn-primary w-100 text-center">В КОРЗИНУ</button>
+                                        <button type="submit" class="addtocart-btn w-100 text-center fw-bold text-white" style="background-color: #001f3f; padding: 10px; border: none;">В КОРЗИНУ</button>
                                     </form>
                             </div>
 
-                            <button type="button"
-                                    class="wishlist-btn card-wishlist js-wishlist-toggle {% if rel_product.id in wishlist_product_ids %}active{% endif %}"
-                                    data-product-id="{{ rel_product.id }}"
-                                    data-url="{% url 'wishlist_toggle' rel_product.id %}"
-                                    title="Добавить в избранное">
-                                <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="{% if rel_product.id in wishlist_product_ids %}#F76B6A{% else %}none{% endif %}"
-                                    stroke="{% if rel_product.id in wishlist_product_ids %}#F76B6A{% else %}black{% endif %}"
-                                    stroke-width="1.5">
+                            <button type="button" class="wishlist-btn card-wishlist js-wishlist-toggle {% if rel_product.id in wishlist_product_ids %}active{% endif %}" data-product-id="{{ rel_product.id }}" data-url="{% url 'wishlist_toggle' rel_product.id %}" title="Добавить в избранное">
+                                <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22" xmlns="http://www.w3.org/2000/svg" fill="{% if rel_product.id in wishlist_product_ids %}#F76B6A{% else %}none{% endif %}" stroke="{% if rel_product.id in wishlist_product_ids %}#F76B6A{% else %}black{% endif %}" stroke-width="1.5">
                                     <path d="M6.96429 0.000183105C3.12305 0.000183105 0 3.10686 0 6.84843C0 8.15388 0.602121 9.28455 1.16071 10.1014C1.71931 10.9181 2.29241 11.4425 2.29241 11.4425L12.3326 21.3439L13 22.0002L13.6674 21.3439L23.7076 11.4425C23.7076 11.4425 26 9.45576 26 6.84843C26 3.10686 22.877 0.000183105 19.0357 0.000183105C15.8474 0.000183105 13.7944 1.88702 13 2.68241C12.2056 1.88702 10.1526 0.000183105 6.96429 0.000183105Z"/>
                                 </svg>
                             </button>
                         </div>
                         <div class="product-card-details text-center">
                             <h3 class="product-card-title">
-                                <a href="/product/{{ rel_product.id }}">{{ rel_product.title }}</a>
+                                <a href="/product/{{ rel_product.id }}" style="font-family: 'Playfair Display', serif; color: #001f3f;">{{ rel_product.title }}</a>
                             </h3>
                             <div class="product-card-price">
-                                <!-- Используем фильтры для красивого вывода цены -->
-                                <span class="card-price-regular">{{ rel_product.price|floatformat:0|intcomma }} ₽</span>
+                                <span class="card-price-regular fw-bold">{{ rel_product.price|floatformat:0|intcomma }} ₽</span>
                             </div>
                         </div>
                     </div>
