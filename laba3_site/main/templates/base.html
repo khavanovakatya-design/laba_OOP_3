@@ -178,26 +178,5 @@
     <script src="{% static 'js/vendor.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/cart.js' %}"></script>
-    
-    <script>
-        const scrollBtn = document.getElementById('scrollup');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                scrollBtn.style.display = 'block';
-                scrollBtn.style.animation = 'fadeIn 0.3s';
-            } else {
-                scrollBtn.style.display = 'none';
-            }
-        });
-
-        scrollBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
 </body>
-
 </html>

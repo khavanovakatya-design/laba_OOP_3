@@ -134,21 +134,6 @@
     $('.filter-drawer').toggleClass('active');
   });
 
-  // product img popup
-  $('[data-fancybox="gallery"]').fancybox({
-    buttons: [
-      "slideShow",
-      "thumbs",
-      "zoom",
-      "fullScreen",
-      "share",
-      "close"
-    ],
-    loop: false,
-    protect: true
-  });
-
-
   /* --------------------------------------------------------
     scrollUp active
   -------------------------------------------------------- */

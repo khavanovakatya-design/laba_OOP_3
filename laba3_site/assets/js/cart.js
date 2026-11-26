@@ -225,4 +225,27 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     });
+
+    // ==========================================
+    // 5. КНОПКА «НАВЕРХ» (#scrollup)
+    // ==========================================
+    const scrollBtn = document.getElementById('scrollup');
+
+    if (scrollBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollBtn.style.display = 'block';
+                scrollBtn.style.animation = 'fadeIn 0.3s';
+            } else {
+                scrollBtn.style.display = 'none';
+            }
+        });
+
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
 });
